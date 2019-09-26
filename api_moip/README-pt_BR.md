@@ -1,51 +1,54 @@
-# Package for API v2 MoIP
+# Package para a API v2 do MoIP
 ----------------------
-> Current Status Package
+### Package para a API v1 do MoIP (Laravel 4)
+
+Para utilizar o package com Laravel 4 [clique aqui](https://github.com/SOSTheBlack/moip), este package está integrado somente com a API V1 do MoIP
+
+> Estado Atual do Package
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/artesaos/moip/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/artesaos/moip/?branch=master)
 [![Code Climate](https://codeclimate.com/github/artesaos/moip/badges/gpa.svg)](https://codeclimate.com/github/artesaos/moip)
 [![Build Status](https://scrutinizer-ci.com/g/artesaos/moip/badges/build.png?b=master)](https://scrutinizer-ci.com/g/artesaos/moip/build-status/master)
 [![Codacy Badge](https://www.codacy.com/project/badge/61b5d36f2e544ffea6fa79ae316cc9d6)](https://www.codacy.com/app/jeancesargarcia/moip)
 
-> Statistics
+> Estatísticas
 
 [![Total Downloads](https://poser.pugx.org/artesaos/moip/downloads)](https://packagist.org/packages/artesaos/moip)
 [![Monthly Downloads](https://poser.pugx.org/artesaos/moip/d/monthly)](https://packagist.org/packages/artesaos/moip)
 [![Daily Downloads](https://poser.pugx.org/artesaos/moip/d/daily)](https://packagist.org/packages/artesaos/moip)
 
-> Version
+> Versionamento
 
 [![Latest Stable Version](https://poser.pugx.org/artesaos/moip/v/stable)](https://packagist.org/packages/artesaos/moip)
 [![Latest Unstable Version](https://poser.pugx.org/artesaos/moip/v/unstable)](https://packagist.org/packages/artesaos/moip)
 
 
-> Tips
+> Dicas
 
 <a href="http://zenhub.io" target="_blank"><img src="https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png" height="18px" alt="Powered by ZenHub"/></a>
 
-> License
+> Licença
 
 [![License](https://poser.pugx.org/artesaos/moip/license)](https://packagist.org/packages/artesaos/moip)
 
 
-## Installation
+## Instalação
 
 #### Composer
 
-Start by adding the package to require your composer.json
+Comece adicionando o package no require do seu composer.json
 
 ```shell
-composer require artesaos/moip
+"artesaos/moip": "^1.0"
 ```
 
-Having loaded dependencies and installed on your project, we will add ServiceProvider and facade.
+Tendo as dependências carregadas e instaladas em seu projeto, vamos adicionar o ServiceProvider e o facade.
 
-### ServiceProvider
-You need to update your application configuration in order to register the package so it can be loaded by Framework.
+#### ServiceProvider
+Você precisa atualizar sua configuração do aplicativo, a fim de registrar o pacote para que ele possa ser carregado pelo Framework
 
-#### Laravel
-Just update your `config/app.php` file adding the following code at the end of your `'providers'` section:
-
+####Laravel
+Basta atualizar o seu arquivo `config/app.php` adicionando o seguinte código no final do seu `serviceproviders`:
 ```php
 'providers' => array(
     Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
@@ -58,7 +61,7 @@ Just update your `config/app.php` file adding the following code at the end of y
 
 
 #### Lumen
-Go to `/bootstrap/app.php` file and add this line:
+No arquivo `/bootstrap/app.php` Adicione está linha:
 
 ```php
 // file START ommited
@@ -67,7 +70,7 @@ Go to `/bootstrap/app.php` file and add this line:
 ```
 
 #### Facade
-Adding a new item on its facade
+Adicionando um novo item no seu facade
 
 ```php
 'aliases' => array(
@@ -78,25 +81,25 @@ Adding a new item on its facade
 ),
 ```
 
-#### Settings
-To move the MoIP settings file to the Settings folder of your application, simply perform the following command:
+#### Configurações
+Para mover o arquivo de configurações do moip para a pasta de configurações da sua applicação, basta realizar o seguinte comando:
 
 ```shell
 php artisan vendor:publish
 ```
+ou
 
-or
 ```shell
 php artisan vendor:publish --provider="Artesaos\Moip\Providers\MoipServiceProvider"
 ```
 
-If you have already published the files, but for some reason need to override them, add the flag '--force' at the end of the previous command.
+Se você já publicou os arquivos, mas por algum motivo precisa sobrescrevê-los, adicione a flag '--force' no final do comando anterior.
 
 ```shell
 php artisan vendor:publish --provider="Artesaos\Moip\Providers\MoipServiceProvider" --force
 ```
 
-His `.env` file, add the following values
+No Seu arquivo `.env`, adicione os seguintes valores
 
 ```
 MOIP_KEY=yourkeyfortheservice
@@ -104,15 +107,14 @@ MOIP_TOKEN=yourtokefortheservice
 MOIP_HOMOLOGATED=keyshomologatedtrueorfalse
 ```
 
-## Using
+## Usando
 
 ```php
 $moip = Moip::start();
 ```
 
-#### Creating a buyer
-
-In this example we will create a request with customer data - With delivery and payment address.
+#### Criando um comprador
+Nesse exemplo será criado um pedido com dados do cliente - Com endereço de entrega e de pagamento.
 ```php
 try {
     $customer = $moip->customers()->setOwnId(uniqid())
@@ -135,9 +137,8 @@ try {
     dd($e->__toString());
 }
 ```
-#### Creating an application with the buyer we just created
-
-In this example with various products and also specifying freight value, additional value and further discount amount.
+#### Criando um pedido com o comprador que acabamos de criar
+Nesse exemplo com vários produtos e ainda especificando valor de frete, valor adicional e ainda valor de desconto.
 
 ```php
 try {
@@ -162,10 +163,9 @@ try {
 }
 ```
 
-#### Creating payment
-
-After creating the application simply create a payment request.
-In this example we are paying by credit card.
+#### Criando o pagamento
+Após criar o pedido basta criar um pagamento nesse pedido.
+Nesse exemplo estamos pagando com Cartão de Crédito.
 
 ```php
 try {
@@ -178,14 +178,10 @@ try {
 }
 ```
 
-## Package for MoIP API v1 - Laravel 4
+## Documentação
 
-To use the package with Laravel 4 [clique aqui](https://github.com/SOSTheBlack/moip), This package is integrated only with the V1 API MoIP
+[Documentação oficial](https://moip.com.br/referencia-api/)
 
-## Documentation
-
-[Official documentation](https://dev.moip.com.br/)
-
-## License
+## Licença
 
 [The MIT License](https://github.com/artesaos/moip/blob/master/LICENSE)
