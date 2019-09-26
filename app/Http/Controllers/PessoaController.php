@@ -37,7 +37,7 @@ class PessoaController extends Controller
     {
         //$pessoa = new Pessoa;
 
-
+        $id = '';
         $user= $request->input('user');
         $Nome = $request->input('Nome');
         $email = $request->input('email');
@@ -48,7 +48,8 @@ class PessoaController extends Controller
         /*$pessoa->Logra = $request->txLogra;
         $pessoa->Logra .= $request->cbLogra;*/
 
-        $dados = array( 'user' => $user,
+        $dados = array( 
+                        'user' => $user,
                         'Nome' => $Nome,
                         'email'=> $email,
                         'fone' => $fone,
@@ -56,10 +57,43 @@ class PessoaController extends Controller
                         'Cep' => $Cep );
 
 
-        DB::table('users')->insert($dados);
+        
+        
+
+        
+        /*if (empty($pessoa)){
+            return "Falha no cadastro";
+        }*/
+  
+
+        $pessoa = DB::select('select * from users where user = ?', [$user]);
+
+    
+
+        if(count($pessoa) >= 1){
+            echo'<script>function volta(){history.go(-1);}</script>';
+            return '<p style="font-family:Helvetica, Arial, Sans-Serif; font-size:20px; padding-top:6px; padding-left:6px;  height:30px; background-color:red; border-radius:8px;">Esse usuário já está cadastrado no sistema.</p>'.'<script>setTimeout("volta()", 4000);</script>';
+        
+        }
+        if(count($pessoa) == 0){
+            $insert = DB::table('users')->insert($dados);
+            $pessoa = DB::select('select * from users where user = ?', [$user]);
+            return view ('pessoa.show')->withPessoa($pessoa[0]);
+        }
 
 
+        
 
+    }
+
+    public function show($id)
+    {
+        // get the nerd
+        $pessoa = Pessoa::find($id);
+       
+
+        // show the view and pass the nerd to it
+        return view('pessoa.show')->with('pessoa', $pessoa);
     }
 
     //CRIEI ESTES PROCEDIMENTOS SOMENTE PARA TESTES
@@ -333,15 +367,7 @@ class PessoaController extends Controller
 
     }
 
-    public function show($id)
-    {
-        // get the nerd
-        $pessoa = Pessoa::find($id);
 
-        // show the view and pass the nerd to it
-        return View::make('pessoa.show')
-            ->with('pessoa', $pessoa );
-    }
 
     public function edit($id)
     {
