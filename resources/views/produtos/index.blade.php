@@ -455,6 +455,21 @@
                                 <img border="0" src="{{asset('resources/assets/img/indexdesc.png')}}" width="400" height="60"></p>
                         </td>
                     </tr>
+
+
+<!--TESTE PARA INCLUSAO DO NOME DO USUARIO RECEBIDO DO PESSOA/SHOW.BLADE.PHP -->
+
+                    <!--<tr>
+                        <td background="{{asset('resources/assets/img/fundo%20menu.png')}}">
+                            <p align="center">&nbsp;
+                                <input type="text" value="{{ $password = $_GET['password'] }}"  required=""  name="user" id="user" size="{{$TamPesq}}">
+                            </p>
+                        </td>
+                    </tr>-->
+
+
+<!--TESTE PARA INCLUSAO DO NOME DO USUARIO RECEBIDO DO PESSOA/SHOW.BLADE.PHP -->
+
                     <tr>
                         <td background="{{asset('resources/assets/img/fundo%20menu.png')}}">
                             <p align="center">&nbsp;

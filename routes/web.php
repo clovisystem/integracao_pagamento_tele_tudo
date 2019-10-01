@@ -1,27 +1,8 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
-
-
 Route::get('/', function () {
     return View::make('produtos/index');
 });
-
 
 Route::auth();
 
@@ -61,6 +42,13 @@ Route::get('resumo', array('uses' => 'PedidoController@Resumo'));
 
 Route::get('CriaUser', 'PessoaController@CriaUser');
 
+Route::resource('pessoa', 'PessoaController');
+
+Route::get('perfil', array('uses' => 'HomeController@perfil'));
+Route::post('perfil', array('uses' => 'HomeController@perfil'));
+
+Route::post('salvarcadastro', "PessoaController@store");
+
 Route::resource('pessoa/create', 'PessoaController@index');
 
 Route::get('pessoa/create', 'PessoaController@index');
@@ -69,13 +57,11 @@ Route::get('layout', 'PessoaController@layout');
 
 Route::get('pessoas/create', 'PessoaController@CriaUser');
 
-
-
-//Route::get('pessoas/store', 'CreateController@store');
-
-Route::post('outras_opcoes', 'OthersOptionsController@Aciona');
+Route::post('credito', 'OthersOptionsController@Aciona');
 
 Route::post('pessoa', 'PessoaController@insert');
+
+//Route::post('produtos/index', 'ProdutosController@Redireciona');
 
 Route::get('/{site}', 'PaginaController@aciona');//DEVE FICAR COMO ĹTIMA OPÇÃO SENÃO VAI PEGAR TODAS AS ROTAS QUE ESCREVER
 

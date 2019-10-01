@@ -17,11 +17,16 @@ class PessoaController extends Controller
 
     public function CriaUser()
     {
-        return view('pessoa.create');
+        return view('pessoa.create')->with('user', '');
     }
 
 
-    //CRIEI ESTES PROCEDIMENTOS SOMENTE PARA TESTES
+
+
+
+
+
+    //CRIEI ESTES PROCEDIMENTOS SOMENTE PARA TESTES-------------------------------------------------------------
 
     public function layout()
     {
@@ -57,14 +62,7 @@ class PessoaController extends Controller
                         'Cep' => $Cep );
 
 
-        
-        
 
-        
-        /*if (empty($pessoa)){
-            return "Falha no cadastro";
-        }*/
-  
 
         $pessoa = DB::select('select * from users where user = ?', [$user]);
 
@@ -96,7 +94,14 @@ class PessoaController extends Controller
         return view('pessoa.show')->with('pessoa', $pessoa);
     }
 
-    //CRIEI ESTES PROCEDIMENTOS SOMENTE PARA TESTES
+    //CRIEI ESTES PROCEDIMENTOS SOMENTE PARA TESTES----------------------------------------------------
+
+
+
+
+
+
+
 
 
     public function index()
@@ -147,6 +152,7 @@ class PessoaController extends Controller
                     $Complemento=$e4[1];
                 }
             }
+echo '72'; die;
             $idTpLogra = $this->getTpLograE($TpLogra);
             $FaceID=Input::get('idFace');
             $Nome=Input::get('faceName');
@@ -185,11 +191,9 @@ class PessoaController extends Controller
                 $idTpLogra = $this->getTpLogra($cbLogra, $txLogra);
             }
         }
-
         IF ($idTpLogra==0) {
             $erro = 'Tipo de Logradouro não identificado = '.$txLogra;
         }
-
         if ($erro>'') {
             if ($tpEnder=='E') {
                 Session::put('erro', $erro);
@@ -224,25 +228,20 @@ class PessoaController extends Controller
             $pessoa->email    = Input::get('email');
             $pessoa->user     = Input::get('user');
 
-            $idPedido = 0;
-            if (Session::has('PEDIDO')) {
-                $idPedido = Session::get('PEDIDO');
-            }
+            $idPedido = Input::get('idPedido');
 
             // $Tpe=0;
             $pessoa->FaceID = $FaceID;
             if ($pessoa->FaceID>0) {
-                // $Tpe = Session::get('TpEntrega');
             }
 
             $idRede = Input::get('idRede');
             if ($idRede>0) {
-                $idPedido = Input::get('idPedido');
                 $pessoa->RedeID =$idRede;
             }
             $this->loga('idRede:'.$idRede);
 
-            $pessoa->fone     = Input::get('fone');
+            $pessoa->fone = Input::get('fone');
 
             // $pessoa->password = Input::get('password');
             $pessoa->password = Hash::make(Input::get('password'));
@@ -253,13 +252,7 @@ class PessoaController extends Controller
             // $pessoa->EnderDesc = Input::get('EnderDesc');
             $pessoa->Endereco_ID = $idEndereco;
 
-            if (Session::has('idCaptador')) {
-                $cCap = new Captador();
-                $idCaptador = $cCap->getIdCaptador(Session::get('idCaptador'));
-                $pessoa->idCaptador = $idCaptador;
-            } else {
-                $pessoa->idCaptador = 1;
-            }
+            $pessoa->idCaptador =  Input::get('remember_token');
 
             $pessoa->save();
             $ultPessoa = DB::table('users')->max('id');
@@ -271,6 +264,7 @@ class PessoaController extends Controller
                 Session::put('iduser', $ultPessoa);
                 // echo 'logou '.$ultPessoa; die;
 
+                // MUDAR AQUI
                 Session::put('Nome',$Nome);
                 if ($idPedido>0) {
 
@@ -300,7 +294,6 @@ class PessoaController extends Controller
                 }
 
             } else {
-
                 $idPessoa = $this->SetaUserServico(Input::get('email'));
                 if ($idPessoa>0) {
                     $this->loga('idPessoa>0 SetaUserServico');
@@ -312,16 +305,14 @@ class PessoaController extends Controller
 
                     Session::flash('message', 'Você pode editar seu anúncio');
                 }
-
                 if ($this->LograNovo==1) {
                     $MensAdicUser = 'Seu cadastro foi adicionado, mas seu endereço precisa ser confirmado<p>será avisado por email quando tiver ocorrido';
                 } else {
 
-                    Session::put('Nome',$pessoa->Nome);
+                    // Session::put('Nome',$pessoa->Nome);
                     Auth::loginUsingId($ultPessoa);
                     $MensAdicUser = 'Usuário adicionado com sucesso!<Br>Voce já pode realizar suas compras';
                 }
-
                 $cProd = new Produtos();
                 $Tem = $cProd->VeSeTemCidDoCliente($pessoa->Cep, $idCidade);
                 if ($Tem>0) {
@@ -331,10 +322,10 @@ class PessoaController extends Controller
                 }
 
                 // $MensAdicUser.='<Br><Br>Caso deseja ser nosso fornecedor ou representante entre em contato pelo email: xeviousbr@gmail.com';
-                Session::flash('message', $MensAdicUser);
+                // Session::flash('message', $MensAdicUser);
 
                 Auth::loginUsingId($ultPessoa);
-                Session::put('iduser', $ultPessoa);
+                // Session::put('iduser', $ultPessoa);
 
                 // echo 'logou '.$ultPessoa; die;
 

@@ -83,4 +83,9 @@ class ProdutosController extends Controller
     {
         //
     }
+
+    /*public function redireciona($user)
+    {
+        return view('produtos.index')->with('user', $user);
+    }*/
 }

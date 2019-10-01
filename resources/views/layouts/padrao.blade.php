@@ -180,12 +180,14 @@ $sValor = "R$ 0,00";
                 </td>
                 <?php
                 } else {
+             
                 ?>
                 <td width="40%" class="text-center">
 		    <img border="0" src="https://www.tele-tudo.com/resources/assets/img/usuario.png" width="100" height="15">		    
-		    <input type="text" name="user" size="20"><br>
+		    
+            <input type="text" name="user" id="user" value="{{ $_GET['user'] or '' }}" size="20"><br>
 		    <img border="0" src="https://www.tele-tudo.com/resources/assets/img/senha.png" width="100" height="15">
-		    <input type="password" name="senha" size="2">
+		    <input type="password" name="senha" value="{{ $_GET['password'] or '' }}" size="2">
 		    <br>
 		    <input checked="checked" name="remember" type="checkbox" value="remember">
 
