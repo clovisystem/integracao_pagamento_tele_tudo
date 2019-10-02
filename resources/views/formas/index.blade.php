@@ -67,16 +67,27 @@ $_GET['ped']='8736';
 $Ped = $_GET['ped'];
 
 //$Valor = Session::get('VLRTOTAL'); //O CODIGO AO LADO SÓ DEVE SER USADO EM PRODUÇÃO, EM DESENVOLVIMENTO COMENTE!
-$Valor = '100.00';
+$Descricao = 'DVD Independence Day';
+$Valor = '20.00';
 $Valor = $Valor * 100;
 $Id_carteira = "xeviousbr@gmail.com";
 $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
+$user = 'testenildo';
+$email = 'teste@test.com';
+$fone = '11999457215';
+$cep = '21320060';
+$logradouro = 'rua apiacas';
+$lograNumber = '15';
+$lograCompl = 'apto8';
+$cidade = 'Santo Andre';
+$bairro = 'marajoara';
+$estado = 'SP';
 
 //, compact(Id_carteira, Valor, Ped, Nome -> ESTAVE NO ROUTE DA ACTION DO FORM
 ?>
 
 <!--<form action="https://www.moip.com.br/PagamentoMoIP.do" method="POST">-->
-<form action="/outras_opcoes" method="POST">
+<form action="/credito" method="POST">
     {!! Csrf_Field() !!}
     
     {{ method_field('POST') }}
@@ -86,6 +97,8 @@ $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
 
     <!--O valor da transação, sem vírgulas e identificador da moeda	Numérico (inteiro)	9-->
     <input type="hidden" name="valor"  value="{{$Valor}}">
+
+    <input type="hidden" name="descricao"  value="{{$Descricao}}">
 
     <input type="hidden" name="id_transacao"  value="{{$Ped}}">
 

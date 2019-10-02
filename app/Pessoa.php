@@ -27,7 +27,5 @@ class Pessoa extends Model
     ];
 
 
-
-
    
 }
