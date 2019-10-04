@@ -151,6 +151,18 @@ $sValor = "R$ 0,00";
                       $cor="#000000";
                    }
                 ?>
+                 <span style="opacity:0;">   
+                    {{ $password = Request::input('password') }}
+                    {{ $user = Request::input('user') }}
+                    
+                    @if($user != '' && $password != '')
+                        {{ $user = Request::input('user') }}
+                        {{ $password = Request::input('password') }}
+                    @else
+                        {{ $user = '' }}
+                        {{ $password = '' }}
+                    @endif
+                </span> 
                 <td width="40%" class="text-center">
                     <br>
                     <div style='color: {{$cor}}' >
@@ -183,11 +195,25 @@ $sValor = "R$ 0,00";
              
                 ?>
                 <td width="40%" class="text-center">
+               
 		    <img border="0" src="https://www.tele-tudo.com/resources/assets/img/usuario.png" width="100" height="15">		    
-		    
+<!--		    
             <input type="text" name="user" id="user" value="{{ $_REQUEST['user'] or '' }}" size="20"><br>
 		    <img border="0" src="https://www.tele-tudo.com/resources/assets/img/senha.png" width="100" height="15">
-		    <input type="password" name="senha" value="{{ $_REQUEST['password'] or '' }}" size="2">
+            <input type="password" name="senha" value="{{ $_REQUEST['password'] or '' }}" size="2">
+-->            
+<!-- TESTE TESTE -->
+
+
+
+            <input type="text" name="user" id="user" value="{{ $user or '' }}" size="20"><br>
+		    <img border="0" src="https://www.tele-tudo.com/resources/assets/img/senha.png" width="100" height="15">
+            <input type="password" name="senha" value="{{ $password or '' }}" size="4">
+            
+
+<!-- TESTE TESTE -->
+
+
 		    <br>
 		    <input checked="checked" name="remember" type="checkbox" value="remember">
 

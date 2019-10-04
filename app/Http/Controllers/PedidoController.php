@@ -23,6 +23,7 @@ class PedidoController extends Controller
     public function Aciona() {
         return view('pedido.index');
     }
+    
 
     public function show($id)
     {

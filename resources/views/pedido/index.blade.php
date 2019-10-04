@@ -1,4 +1,6 @@
 <?php $idUser = 0; ?>
+
+
 @extends('layouts.padrao')
 
 @section('content')
@@ -14,6 +16,8 @@
         document.write("<"+nH+">Confirmação do acionamento da entrega</"+nH+">");
     </script>
     <?php
+    
+    
     $cEntrega = new App\Entrega();
     $idPedido = $_GET['IDPED'];
     Session::put('IDPED', $idPedido);
@@ -60,6 +64,7 @@
         </table>
         <br/>
         <br />
+
 
         <?php
         $idPedido = $_GET['IDPED'];

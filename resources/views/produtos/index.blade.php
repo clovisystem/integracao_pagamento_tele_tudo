@@ -427,8 +427,27 @@
 
             ?>
 
+           
+
+            
+
             @if ($qtItens==0)
                 <table align="center" border="0" width="400" cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <td>
+                        <span style="opacity:0.0;">
+                            {{ $user = Request::input('user') }}
+                            {{ $password = Request::input('password') }}
+                        </span>
+                        @if($user != '')
+                            <label for="">Parabéns, {{ $user }} pela compra de {{ $descricao }} no valor de {{ $valor }}, continue comprando com a gente!</label>
+                        @else
+                            {{ '' }}
+                        @endif
+                        </td>
+                    </tr>
+                    </thead>
                     <tbody>
                     <tr>
                         <td>
@@ -457,18 +476,6 @@
                     </tr>
 
 
-<!--TESTE PARA INCLUSAO DO NOME DO USUARIO RECEBIDO DO PESSOA/SHOW.BLADE.PHP -->
-
-                    <!--<tr>
-                        <td background="{{asset('resources/assets/img/fundo%20menu.png')}}">
-                            <p align="center">&nbsp;
-                                <input type="text" value="{{ $password = $_GET['password'] }}"  required=""  name="user" id="user" size="{{$TamPesq}}">
-                            </p>
-                        </td>
-                    </tr>-->
-
-
-<!--TESTE PARA INCLUSAO DO NOME DO USUARIO RECEBIDO DO PESSOA/SHOW.BLADE.PHP -->
 
                     <tr>
                         <td background="{{asset('resources/assets/img/fundo%20menu.png')}}">

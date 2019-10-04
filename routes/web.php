@@ -61,7 +61,7 @@ Route::post('credito', 'OthersOptionsController@Aciona');
 
 Route::post('pessoa', 'PessoaController@insert');
 
-//Route::post('produtos/index', 'ProdutosController@Redireciona');
+Route::post('produtos/index', 'ProdutosController@Redireciona');
 
 Route::get('/{site}', 'PaginaController@aciona');//DEVE FICAR COMO ĹTIMA OPÇÃO SENÃO VAI PEGAR TODAS AS ROTAS QUE ESCREVER
 

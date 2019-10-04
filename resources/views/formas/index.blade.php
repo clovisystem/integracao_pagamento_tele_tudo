@@ -15,7 +15,7 @@
 
 @section('content')
 
-<h1>Escolha a forma de pagamento<h1>
+<h1>Escolha a forma de pagamento, {{ $user or 'Testenildo' }}<h1>
 
 
 <script Language="JavaScript">
@@ -69,7 +69,7 @@ $Ped = $_GET['ped'];
 //$Valor = Session::get('VLRTOTAL'); //O CODIGO AO LADO SÓ DEVE SER USADO EM PRODUÇÃO, EM DESENVOLVIMENTO COMENTE!
 $Descricao = 'DVD Independence Day';
 $Valor = '20.00';
-$Valor = $Valor * 100;
+//$Valor = $Valor * 100;
 $Id_carteira = "xeviousbr@gmail.com";
 $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
 $user = 'testenildo';
@@ -82,6 +82,9 @@ $lograCompl = 'apto8';
 $cidade = 'Santo Andre';
 $bairro = 'marajoara';
 $estado = 'SP';
+
+
+
 
 //, compact(Id_carteira, Valor, Ped, Nome -> ESTAVE NO ROUTE DA ACTION DO FORM
 ?>
@@ -101,6 +104,8 @@ $estado = 'SP';
     <input type="hidden" name="descricao"  value="{{$Descricao}}">
 
     <input type="hidden" name="id_transacao"  value="{{$Ped}}">
+
+    <input type="hidden" name="user"  value="{{$user or 'Testenildo'}}">
 
     <!--Razão do pagamento	Razão do pagamento a ser mostrado na página do MoIP, durante o processo de confirmação (nome do produto/serviço)	Alfanumérico	64-->
     <input type="hidden" name="nome"  value="{{$Nome}}">

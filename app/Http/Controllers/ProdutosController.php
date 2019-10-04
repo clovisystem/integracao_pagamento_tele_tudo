@@ -84,8 +84,8 @@ class ProdutosController extends Controller
         //
     }
 
-    /*public function redireciona($user)
+    public function redireciona()
     {
-        return view('produtos.index')->with('user', $user);
-    }*/
+        return view('produtos.index');
+    }
 }

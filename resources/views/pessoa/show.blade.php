@@ -3,36 +3,12 @@
 <head>
 	<title>Listagem de clientes</title>
 	<script type="text/javascript" src="{{ URL::asset('js/jquery/jquery-1.6.2.min.js') }}"></script>
+	<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-	<script>
+	<link rel="stylesheet" href="css/app.css">
 
-		//var query = $('#user').val();
-      	//fetch_customer_data(query);
-
-		
-			/*window.onload = function(query){
-				alert('q');
-				$.ajax({
-				url:"{{ route('produtos.index') }}",
-				method:'GET',
-				data:{query:query},
-				dataType:'html',
-				success:function(data)
-				{
-					$('#user').text(query);
-				}
-				});
-				}*/
-
-			window.onload = function(){
-				setTimeout(function(){location.href="{!! route('produtos.index', array('user' => $pessoa->user, 'password' => $pessoa->password)) !!}";}, 3000);
-			}
-		
-		  
-	</script>
-		
 </head>
-<body >
+<body onload = "submitform()">
 <div class="container">
 
 <nav class="navbar navbar-inverse">
@@ -51,10 +27,17 @@
 		<h2>{{ $pessoa->Nome }}</h2>
 		<p>
 			<strong>Email:</strong> {{ $pessoa->email }}<br>
-			<input type="hidden" id="user" name="user" value="{{ $pessoa->user }}"/>
+			
 		</p>
 	</div>
-	
+
+	<form name="formPessoaShow" action="produtos/index" method="post">
+		{{ csrf_field() }}
+		<input type="hidden" id="user" name="user" value="{{ $pessoa->user }}"/>
+		<input type="hidden" id="password" name="password" value="{{ $pessoa->password }}"/>
+		<input type="submit" id="enviar" name="enviar" value=""/>
+	</form>
+	<!--FUNÇÃO QUE GERA O SUBMIT AUTOMÁTICO DO FORM ESTÁ EM PUBLIC/JS/APP.JS COMO LINKADO NO CABEÇALHO DESTE ARQUIVO -->
 </div>
 </body>
 </html>
