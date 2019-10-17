@@ -78,7 +78,7 @@
         <script>
             function Pagar() {
                 var tpEnt = <?php echo $tpEnt; ?>;
-                var idPedido = <?php echo $idPedido; ?>;
+                var idPedido = <?php echo $idPedido = '2136'; ?>;
 
                 // alert(tpEnt);
                 if (tpEnt==0) {

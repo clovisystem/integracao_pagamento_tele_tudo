@@ -26,7 +26,7 @@ Route::get('entrega', 'EntregaController@create');
 
 Route::get('confirma', 'PedidoController@Aciona');
 
-Route::get('formas', 'FormasController@Aciona');
+Route::get('formas/{ped?}/{id?}', ['as' => 'formas', 'uses' => 'FormasController@Aciona']);
 
 Route::get('vlrtransf', 'VlrtransfController@Aciona');
 
@@ -57,11 +57,15 @@ Route::get('layout', 'PessoaController@layout');
 
 Route::get('pessoas/create', 'PessoaController@CriaUser');
 
-Route::post('credito', 'OthersOptionsController@Aciona');
+//Route::post('credito', 'OthersOptionsController@Aciona'); FOI DESATIVADO PARA INCLUSAO DA PAGINA DE CARTAO PAGAMENTO/CREDITO
 
 Route::post('pessoa', 'PessoaController@insert');
 
 Route::post('produtos/index', 'ProdutosController@Redireciona');
+
+Route::post('pagamentos/credito', 'OthersOptionsController@Aciona');
+
+Route::post('checkout', 'OthersOptionsController@Checkout');
 
 Route::get('/{site}', 'PaginaController@aciona');//DEVE FICAR COMO ĹTIMA OPÇÃO SENÃO VAI PEGAR TODAS AS ROTAS QUE ESCREVER
 

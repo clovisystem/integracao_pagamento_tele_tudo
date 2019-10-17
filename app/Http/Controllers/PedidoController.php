@@ -10,6 +10,11 @@ use App\Http\Requests; */
 class PedidoController extends Controller
 {
 
+
+    /*public function Index() {
+        return view('pedido.index');
+    }*/ //COLOCADO PARA TESTES
+
     public function Pagtodireto()
     {
         return view('pedido.pagtodireto');

@@ -15,7 +15,14 @@
 
 @section('content')
 
-<h1>Escolha a forma de pagamento, {{ $user or 'Testenildo' }}<h1>
+
+
+@if($user == '')
+    <h1>Logue-se para comprar!<h1>
+@else
+    <h1>Escolha a forma de pagamento, {{ $user }}.<h1>
+@endif
+
 
 
 <script Language="JavaScript">
@@ -58,13 +65,10 @@ if ($Teste==1) {
 
 // }
 
-//O CODIGO ABAIXO SÓ DEVE SER USADO EM DESENVOLVIMENTO, EM PRODUÇÃO COMENTE!
-$_GET['ped']='8736';
-//O CODIGO ACIMA SÓ DEVE SER USADO EM DESENVOLVIMENTO, EM PRODUÇÃO COMENTE!
 
 
 
-$Ped = $_GET['ped'];
+$Ped = $_GET['ped']='2156'; // VEM DA VIEW PEDIDOS/INDEX - RETIRAR O VALOR AO LADO EM TEMPO DE PRODUÇÃO
 
 //$Valor = Session::get('VLRTOTAL'); //O CODIGO AO LADO SÓ DEVE SER USADO EM PRODUÇÃO, EM DESENVOLVIMENTO COMENTE!
 $Descricao = 'DVD Independence Day';
@@ -72,11 +76,11 @@ $Valor = '20.00';
 //$Valor = $Valor * 100;
 $Id_carteira = "xeviousbr@gmail.com";
 $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
-$user = 'testenildo';
-$email = 'teste@test.com';
-$fone = '11999457215';
-$cep = '21320060';
-$logradouro = 'rua apiacas';
+$user = 'teste';
+$email = 'teste@teste.com';
+$fone = '3072-5968';
+$cep = '91780118';
+$logradouro = 'endereço 20';
 $lograNumber = '15';
 $lograCompl = 'apto8';
 $cidade = 'Santo Andre';
@@ -90,7 +94,7 @@ $estado = 'SP';
 ?>
 
 <!--<form action="https://www.moip.com.br/PagamentoMoIP.do" method="POST">-->
-<form action="/credito" method="POST">
+<form action="/pagamentos/credito" method="POST">
     {!! Csrf_Field() !!}
     
     {{ method_field('POST') }}
@@ -105,7 +109,7 @@ $estado = 'SP';
 
     <input type="hidden" name="id_transacao"  value="{{$Ped}}">
 
-    <input type="hidden" name="user"  value="{{$user or 'Testenildo'}}">
+    <input type="hidden" name="user"  value="{{$user}}">
 
     <!--Razão do pagamento	Razão do pagamento a ser mostrado na página do MoIP, durante o processo de confirmação (nome do produto/serviço)	Alfanumérico	64-->
     <input type="hidden" name="nome"  value="{{$Nome}}">
