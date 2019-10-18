@@ -4,12 +4,61 @@
 <title>{{ $User }}, informe os dados do cartão de crédito</title>
 
 <script type="text/javascript" src="{{ URL::asset('js/pagamento.js') }}"></script>
-
+<script type="text/javascript" src="{{ URL::asset('js/jquery/pagamento.jquery.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/jquery/jquery-1.6.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js') }}"></script>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-
 <link rel="stylesheet" href="../../css/pagamento.css">
 
+
+
+<script>
+$(document).ready(function(){
+
+    valor = document.getElementById("parcelas").value='1';
+    
+
+
+    $("#valor").change(function(){
+        var selecao = $(this).val(); // pega o valor
+        var indice = $(this).index();
+        var indice = $(this).prop('selectedIndex'); //pega o índice do select/option(html)
+
+       
+        if (indice == 0){
+            indice++;
+        }
+        else if(indice == 1){
+            indice++;
+        }
+        else if(indice == 2){
+            indice++;
+        }
+        else if(indice == 3){
+            indice++;
+        }
+        else if(indice == 4){
+            indice++;
+        }
+        else if(indice == 5){
+            indice++;
+        }
+        else if(indice == 6){
+            indice++;
+        }
+        else if(indice == 7){
+            indice++;
+        }
+        else{
+            indice++;
+        }
+
+
+        $("#parcelas").val(indice);
+    });
+});
+
+</script>
 </head>
 <body>
 <div class="payment-title">
@@ -127,48 +176,54 @@
                 <input name="id_transacao" class="form-control" maxlength="80" type="hidden" value="{{ $id_transacao }}">
                 <!--<input name="valor" class="form-control" maxlength="80" type="hidden" value="{{ $valor }}">-->
                 @if($valor >= 1000.00)
-                <select name="valor" class-"form-control">
+                <select name="valor" id="valor" class-"form-control">
                     <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
                     <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
-                    <option value="{{ $valor2 }}">2x de R$ {{ $valor2 }}</option>
+                    <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
                     <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
-                    <option value="{{ $valor3 }}">3x de R$ {{ $valor3 }}</option>
+                    <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
                     <?php $valor4 = number_format($valor / 4, 2,'.',','); ?>
-                    <option value="{{ $valor4 }}">4x de R$ {{ $valor4 }}</option>
+                    <option value="{{ $valor4 * 4 }}">4x de R$ {{ $valor4 }}</option>
                     <?php $valor5 = number_format($valor / 5, 2,'.',','); ?>
-                    <option value="{{ $valor5 }}">5x de R$ {{ $valor5 }}</option>
+                    <option value="{{ $valor5 * 5 }}">5x de R$ {{ $valor5 }}</option>
                     <?php $valor6 = number_format($valor / 6, 2,'.',','); ?>
-                    <option value="{{ $valor6 }}">6x de R$ {{ $valor6 }}</option>
+                    <option value="{{ $valor6 * 6 }}">6x de R$ {{ $valor6 }}</option>
                     <?php $valor10 = number_format($valor / 10, 2,'.',','); ?>
-                    <option value="{{ $valor10 }}">10x de R$ {{ $valor10 }}</option>
+                    <option value="{{ $valor10 * 10 }}">10x de R$ {{ $valor10 }}</option>
                     <?php $valor11 = number_format($valor / 11, 2,'.',','); ?>
-                    <option value="{{ $valor11 }}">11x de R$ {{ $valor11 }}</option>
+                    <option value="{{ $valor11 * 11 }}">11x de R$ {{ $valor11 }}</option>
                     <?php $valor12 = number_format($valor / 12, 2,'.',','); ?>
-                    <option value="{{ $valor12 }}">12x de R$ {{ $valor12 }}</option>
+                    <option value="{{ $valor12 * 12 }}">12x de R$ {{ $valor12 }}</option>
                 </select>
                 @elseif($valor >= 100.00)
-                <select name="valor" class-"form-control">
+                <select name="valor" id="valor" class-"form-control">
                     <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
                     <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
-                    <option value="{{ $valor2 }}">2x de R$ {{ $valor2 }}</option>
+                    <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
                     <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
-                    <option value="{{ $valor3 }}">3x de R$ {{ $valor3 }}</option>
+                    <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
                     <?php $valor4 = number_format($valor / 4, 2,'.',','); ?>
-                    <option value="{{ $valor4 }}">4x de R$ {{ $valor4 }}</option>
+                    <option value="{{ $valor4 * 4 }}">4x de R$ {{ $valor4 }}</option>
                     <?php $valor5 = number_format($valor / 5, 2,'.',','); ?>
-                    <option value="{{ $valor5 }}">5x de R$ {{ $valor5 }}</option>
+                    <option value="{{ $valor5 * 5 }}">5x de R$ {{ $valor5 }}</option>
                     <?php $valor6 = number_format($valor / 6, 2,'.',','); ?>
-                    <option value="{{ $valor6 }}">6x de R$ {{ $valor6 }}</option>
+                    <option value="{{ $valor6 * 6 }}">6x de R$ {{ $valor6 }}</option>
                 </select>
                 @else
-                <select name="valor" class-"form-control">
+                <select name="valor" id="valor" class-"form-control">
                     <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
                     <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
-                    <option value="{{ $valor2 }}">2x de R$ {{ $valor2 }}</option>
+                    <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
                     <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
-                    <option value="{{ $valor3 }}">3x de R$ {{ $valor3 }}</option>
+                    <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
                 </select>
                 @endif
+
+
+
+
+
+                <input name="parcelas" id="parcelas" type="hidden" value="">
 
                 <input name="descricao" type="hidden" value="{{ $descricao }}">
                 <input name="User"  type="hidden" value="{{ $User }}">
@@ -177,7 +232,7 @@
             </div>
             <br/>   
             <div class="field-container">
-                <label for="cardnumber">Número do Cartão</label><span id="generatecard">Escolha a bandeira do seu cartão</span>
+                <label for="cardnumber">Número do Cartão</label><span id="generatecard">Generate random</span><!--GENERATE RANDOM SÓ PARA TESTES -->
                 <input id="cardnumber" class="form-control" type="text" inputmode="numeric">
                 <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -199,6 +254,8 @@
         </div>
     </div>
     </form>
+
+
 </body>
 </html>
 

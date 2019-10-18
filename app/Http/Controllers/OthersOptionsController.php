@@ -88,6 +88,7 @@ class OthersOptionsController extends Controller
         $Ped = $request->input('id_transacao');
         $User = $request->input('User');
         $id_carteira = $request->input('id_carteira');
+        $parcelas = $request->input('parcelas');
         $sandbox = $request->input('sandbox');
 
 
@@ -97,7 +98,7 @@ class OthersOptionsController extends Controller
         $key = 'IEVEAUWW0E4GX6FPYIEUHC7YTJEGOFNYXCEPKAER';
         $sandbox = true;
 
-        $moipPag = new MoipPagamento($token, $key, $sandbox, $Ped, $id_carteira, $User );
+        $moipPag = new MoipPagamento($token, $key, $sandbox, $Ped, $id_carteira, $User, $parcelas );
 
         $scripts = $moipPag->setID($setID = uniqid())   //ID unico para identificar a compra
                             ->setPreco($Valor)   //Preço da compra
@@ -108,7 +109,7 @@ class OthersOptionsController extends Controller
         If($scripts){
             $Nome = Clientes::where('user', $User)->first()->Nome;
             //COMENTE EM PRODUÇÃO O COMANDO ABAIXO, EM TESTES COMENTE O SCRIPT DE CIMA
-            return 'Usuário: '.$User.'<br/>ID: '.$setID.'<br/>PEDIDO: '.$Ped.'<br/>VALOR R$: '.$Valor.'<br/>PRODUTO: '.$Descricao.'<br/>VENDEDOR: '.$id_carteira.'<br/>SANDBOX? '.$sandbox;
+            return 'Usuário: '.$User.'<br/>ID: '.$setID.'<br/>PEDIDO: '.$Ped.'<br/>VALOR R$: '.$Valor.'<br/>PARCELAS: '.$parcelas.'<br/>PRODUTO: '.$Descricao.'<br/>VENDEDOR: '.$id_carteira.'<br/>SANDBOX? '.$sandbox;
         
             //return 'sucesso';
 
