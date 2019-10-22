@@ -10,33 +10,28 @@ class Enderecos extends Model
     protected $table = 'endereco';
 
     public function GetEndereco($id, $red) {
-
-        $sql = 'select endereco.Numero, logradouro.NomeLog, tplogradouro.nometplog, cidade.NomeCidade, estado.Sigla, bairro.NomeBairro, cep.NrCep, endereco.complemento';
-        $sql = $sql.' from endereco ';
-        $sql = $sql.' left join cep on cep.id = endereco.idCep';
-        $sql = $sql.' inner join logradouro on logradouro.ID = endereco.Logradouro_ID';
-        $sql = $sql.' inner join tplogradouro on tplogradouro.ID = logradouro.TpLogradouro_ID';
-        $sql = $sql.' left join bairro on bairro.id = endereco.idBairro ';
-        $sql = $sql.' inner join cidade on cidade.id = logradouro.Cidade_ID';
-        $sql = $sql.' inner join estado on estado.ID = cidade.Estado_ID';
-        $sql = $sql.' where endereco.ID = '.$id;
-        $sql = $sql.' limit 1 ';
-
-        // if(Auth::check()) { echo $sql; die; }
-
+        $sql = "Select endereco.Numero, endereco.cep, endereco.complemento, endereco.CEP,  
+                  logra.NomeLog, 
+                  tplogradouro.nometplog, 
+                  cep_cidade.cidade as NomeCidade, cep_cidade.estado, 
+                  cep_bairro.bairro as NomeBairro    
+                from endereco 
+                inner join logra on logra.ID = endereco.Logradouro_ID 
+                inner join tplogradouro on tplogradouro.ID = logra.TpLogradouro_ID 
+                left join cep_bairro on cep_bairro.id_bairro = endereco.idBairro 
+                inner join cep_cidade on cep_cidade.id_cidade = logra.Cidade_ID 
+                where endereco.ID = ".$id;
+        $sql = $sql." limit 1 ";
         $enders = DB::select($sql);
-
         $ret = '';
-
         foreach ($enders as $ender) {
             $Numero = $ender->Numero;
             $NomeLog = $ender->NomeLog;
             $nometplog = $ender->nometplog;
             $NomeCidade = $ender->NomeCidade;
             $bairro = $ender->NomeBairro;
-            $Sigla = $ender->Sigla;
-            $NrCep = $ender->NrCep;
-
+            $Sigla = $ender->estado;
+            $NrCep = $ender->CEP;
             if ($NomeLog==null) {
                 if ($bairro==null) {
                     $ret = $NomeCidade.', '.$Sigla;

@@ -13,22 +13,19 @@
 
 
 <script>
-$(document).ready(function(){
+$(document).ready(function(){ //AO CARREGAR A PÁGINA...
 
-    valor = document.getElementById("parcelas").value='1';
+    valor = document.getElementById("parcelas").value='1'; //VALOR DEFAULT PARA A INPUT PARCELAS QUE ESTÁ HIDDEN
     
-
-
-    $("#valor").change(function(){
-        var selecao = $(this).val(); // pega o valor
-        var indice = $(this).index();
+    $("#valor").change(function(){ //EVENTO CHANGE DA SELECT/OPTION DA PÁGINA
+        var selecao = $(this).val(); // pega o valor INTEIRO DA COMPRA
         var indice = $(this).prop('selectedIndex'); //pega o índice do select/option(html)
 
        
-        if (indice == 0){
-            indice++;
+        if (indice == 0){ //SOMA 1 AO VALOR DOS ÍNDICES DAS OPTIONS, O QUE É 0 FICA 1, 1 FICA 2, ETC.
+            indice++;     //PARA PASSAR O NÚMERO DE PARCELAS DO CARTAO QUE TEM QUE INICIAR COM 1 
         }
-        else if(indice == 1){
+        else if(indice == 1){ 
             indice++;
         }
         else if(indice == 2){
@@ -54,7 +51,7 @@ $(document).ready(function(){
         }
 
 
-        $("#parcelas").val(indice);
+        $("#parcelas").val(indice); //ATRIBUI O NÚMERO DE PARCELAS AO INPUT 
     });
 });
 
@@ -162,98 +159,109 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-    <form name="form-credito"  method="post" action="/checkout">
-    {!! Csrf_Field() !!}   
-    {{ method_field('POST') }}
-    <span style="visibility:hidden;">{{ $valor = '5.00' }}</span><!--PARA TESTES DE VALORES COM O SELECT -->
-    <div class="form-group">
-        <div id="form-agrupado">
-            <div class="field-container">
-                <label for="name">Nome</label>
-                <input name="name" id="name" class="form-control" maxlength="80" type="text" value="{{ $Nome }}">
-                <label for="aviso" class="btn btn-warning">Verifique se o nome está igual ao do cartão de crédito</label>
-                <!--<input name="id" class="form-control" maxlength="80" type="hidden" value="{{ $id }}">-->
-                <input name="id_transacao" class="form-control" maxlength="80" type="hidden" value="{{ $id_transacao }}">
-                <!--<input name="valor" class="form-control" maxlength="80" type="hidden" value="{{ $valor }}">-->
-                @if($valor >= 1000.00)
-                <select name="valor" id="valor" class-"form-control">
-                    <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
-                    <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
-                    <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
-                    <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
-                    <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
-                    <?php $valor4 = number_format($valor / 4, 2,'.',','); ?>
-                    <option value="{{ $valor4 * 4 }}">4x de R$ {{ $valor4 }}</option>
-                    <?php $valor5 = number_format($valor / 5, 2,'.',','); ?>
-                    <option value="{{ $valor5 * 5 }}">5x de R$ {{ $valor5 }}</option>
-                    <?php $valor6 = number_format($valor / 6, 2,'.',','); ?>
-                    <option value="{{ $valor6 * 6 }}">6x de R$ {{ $valor6 }}</option>
-                    <?php $valor10 = number_format($valor / 10, 2,'.',','); ?>
-                    <option value="{{ $valor10 * 10 }}">10x de R$ {{ $valor10 }}</option>
-                    <?php $valor11 = number_format($valor / 11, 2,'.',','); ?>
-                    <option value="{{ $valor11 * 11 }}">11x de R$ {{ $valor11 }}</option>
-                    <?php $valor12 = number_format($valor / 12, 2,'.',','); ?>
-                    <option value="{{ $valor12 * 12 }}">12x de R$ {{ $valor12 }}</option>
-                </select>
-                @elseif($valor >= 100.00)
-                <select name="valor" id="valor" class-"form-control">
-                    <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
-                    <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
-                    <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
-                    <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
-                    <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
-                    <?php $valor4 = number_format($valor / 4, 2,'.',','); ?>
-                    <option value="{{ $valor4 * 4 }}">4x de R$ {{ $valor4 }}</option>
-                    <?php $valor5 = number_format($valor / 5, 2,'.',','); ?>
-                    <option value="{{ $valor5 * 5 }}">5x de R$ {{ $valor5 }}</option>
-                    <?php $valor6 = number_format($valor / 6, 2,'.',','); ?>
-                    <option value="{{ $valor6 * 6 }}">6x de R$ {{ $valor6 }}</option>
-                </select>
-                @else
-                <select name="valor" id="valor" class-"form-control">
-                    <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
-                    <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
-                    <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
-                    <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
-                    <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
-                </select>
-                @endif
+    
+
+
+
+        <form name="form-credito"  method="post" action="/store">
+            {!! Csrf_Field() !!}   
+            {{ method_field('POST') }}
+       
+      
+        
+    
+            <span style="visibility:hidden;">{{ $valor = '5.00' }}</span><!--PARA TESTES DE VALORES COM O SELECT -->
+            <div class="form-group">
+                <div id="form-agrupado">
+                    <div class="field-container">
+                        <label for="name">Nome</label>
+                        <input name="name" id="name" class="form-control" maxlength="80" type="text" value="{{ $Nome }}">
+                        <label for="aviso" class="btn btn-warning">Verifique se o nome está igual ao do cartão de crédito</label>
+                        <!--<input name="id" class="form-control" maxlength="80" type="hidden" value="{{ $id }}">-->
+                        <input name="id_transacao" class="form-control" maxlength="80" type="hidden" value="{{ $id_transacao }}">
+                        <!--<input name="valor" class="form-control" maxlength="80" type="hidden" value="{{ $valor }}">-->
+                        @if($valor >= 1000.00)
+                        <select name="valor" id="valor" class-"form-control">
+                            <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
+                            <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
+                            <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
+                            <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
+                            <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
+                            <?php $valor4 = number_format($valor / 4, 2,'.',','); ?>
+                            <option value="{{ $valor4 * 4 }}">4x de R$ {{ $valor4 }}</option>
+                            <?php $valor5 = number_format($valor / 5, 2,'.',','); ?>
+                            <option value="{{ $valor5 * 5 }}">5x de R$ {{ $valor5 }}</option>
+                            <?php $valor6 = number_format($valor / 6, 2,'.',','); ?>
+                            <option value="{{ $valor6 * 6 }}">6x de R$ {{ $valor6 }}</option>
+                            <?php $valor10 = number_format($valor / 10, 2,'.',','); ?>
+                            <option value="{{ $valor10 * 10 }}">10x de R$ {{ $valor10 }}</option>
+                            <?php $valor11 = number_format($valor / 11, 2,'.',','); ?>
+                            <option value="{{ $valor11 * 11 }}">11x de R$ {{ $valor11 }}</option>
+                            <?php $valor12 = number_format($valor / 12, 2,'.',','); ?>
+                            <option value="{{ $valor12 * 12 }}">12x de R$ {{ $valor12 }}</option>
+                        </select>
+                        @elseif($valor >= 100.00)
+                        <select name="valor" id="valor" class-"form-control">
+                            <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
+                            <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
+                            <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
+                            <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
+                            <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
+                            <?php $valor4 = number_format($valor / 4, 2,'.',','); ?>
+                            <option value="{{ $valor4 * 4 }}">4x de R$ {{ $valor4 }}</option>
+                            <?php $valor5 = number_format($valor / 5, 2,'.',','); ?>
+                            <option value="{{ $valor5 * 5 }}">5x de R$ {{ $valor5 }}</option>
+                            <?php $valor6 = number_format($valor / 6, 2,'.',','); ?>
+                            <option value="{{ $valor6 * 6 }}">6x de R$ {{ $valor6 }}</option>
+                        </select>
+                        @else
+                        <select name="valor" id="valor" class-"form-control">
+                            <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
+                            <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
+                            <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
+                            <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
+                            <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
+                        </select>
+                        @endif
 
 
 
 
 
-                <input name="parcelas" id="parcelas" type="hidden" value="">
+                        <input name="parcelas" id="parcelas" type="hidden" value="">
 
-                <input name="descricao" type="hidden" value="{{ $descricao }}">
-                <input name="User"  type="hidden" value="{{ $User }}">
-                <input name="id_carteira"  type="hidden" value="{{ $id_carteira }}">
-                <input name="sandbox"  type="hidden" value="{{ $sandbox }}">
+                        <input name="descricao" type="hidden" value="{{ $descricao }}">
+                        <input name="User"  type="hidden" value="{{ $User }}">
+                        <input name="id_carteira"  type="hidden" value="{{ $id_carteira }}">
+                        <input name="sandbox"  type="hidden" value="{{ $sandbox }}">
+                    </div>
+                    <br/>   
+                    <div class="field-container">
+                        <label for="cardnumber">Número do Cartão</label><span id="generatecard">Generate random</span><!--GENERATE RANDOM SÓ PARA TESTES -->
+                        <input id="cardnumber" class="form-control" type="text" inputmode="numeric">
+                        <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink">
+
+                        </svg>
+                    </div>
+                    <div class="field-container">
+                        <label for="expirationdate">Expira em (mm/yy)</label>
+                        <input id="expirationdate" name= "expirationdate" class="form-control" type="text" pattern="\[1-12]{2}\/[0-9]{2}$">
+                    
+                    </div>
+                    <div class="field-container">
+                        <label for="securitycode">Código de segurança</label>
+                        <input id="securitycode" class="form-control" type="text" pattern="[0-9]{3}">
+                    </div>
+                    <div class="field-container">
+                    
+                        <input id="submite" name="submite" type="submit" value="Comprar">
+                    </div>
+                </div>
             </div>
-            <br/>   
-            <div class="field-container">
-                <label for="cardnumber">Número do Cartão</label><span id="generatecard">Generate random</span><!--GENERATE RANDOM SÓ PARA TESTES -->
-                <input id="cardnumber" class="form-control" type="text" inputmode="numeric">
-                <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink">
 
-                </svg>
-            </div>
-            <div class="field-container">
-                <label for="expirationdate">Expira em (mm/yy)</label>
-                <input id="expirationdate" class="form-control" type="text" pattern="[1-12]{2}/[0-9]{2}$">
-            </div>
-            <div class="field-container">
-                <label for="securitycode">Código de segurança</label>
-                <input id="securitycode" class="form-control" type="text" pattern="[0-9]{3}">
-            </div>
-            <div class="field-container">
-            
-                <input id="submit" type="submit" value="Comprar">
-            </div>
-        </div>
-    </div>
-    </form>
+
+            </form>
 
 
 </body>

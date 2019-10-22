@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Hash;
+use App\Pessoa;
+use App\Produtos;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 
 
 class PessoaController extends Controller
@@ -84,15 +89,10 @@ class PessoaController extends Controller
 
     }
 
-    public function show($id)
-    {
-        // get the nerd
-        $pessoa = Pessoa::find($id);
-       
 
-        // show the view and pass the nerd to it
-        return view('pessoa.show')->with('pessoa', $pessoa);
-    }
+
+    //TIREI A FUNCAO SHOW DAQUI ONDE ESTAVA TESTANDO E PASSEI LÁ EMBAIXO 
+
 
     //CRIEI ESTES PROCEDIMENTOS SOMENTE PARA TESTES----------------------------------------------------
 
@@ -152,7 +152,6 @@ class PessoaController extends Controller
                     $Complemento=$e4[1];
                 }
             }
-echo '72'; die;
             $idTpLogra = $this->getTpLograE($TpLogra);
             $FaceID=Input::get('idFace');
             $Nome=Input::get('faceName');
@@ -167,7 +166,7 @@ echo '72'; die;
                 }
             } else {
                 // CEP POR RUAS
-                $NumeroC = Input::get('txNumeroC');
+                $NumeroC = Input::get('txNumeroC1');
                 if ($NumeroC>'') {
                     $numero = $NumeroC;
                 } else {
@@ -178,7 +177,6 @@ echo '72'; die;
                     $erro = "Informe o endereço";
                 }
             }
-
             if ($numero=='') {
                 $erro="Informe o numero ";
             }
@@ -186,12 +184,15 @@ echo '72'; die;
             $FaceID=0;
             $Nome= Input::get('Nome');
 
-            $txLogra = Input::get('txLogra');
+            $txLogra = Input::get('txLogra1');
+            if ($txLogra=='') {
+                $txLogra = Input::get('txLogra2');
+            }
             if ($erro=='') {
                 $idTpLogra = $this->getTpLogra($cbLogra, $txLogra);
             }
         }
-        IF ($idTpLogra==0) {
+        if ($idTpLogra==0) {
             $erro = 'Tipo de Logradouro não identificado = '.$txLogra;
         }
         if ($erro>'') {
@@ -206,14 +207,16 @@ echo '72'; die;
                     "&Endereco=".Input::get('Endereco').
                     "&fone=".Input::get('fone'));
             } else {
+                echo '127:Erro = '.$erro; die;
                 return Redirect::to('pessoa/create')
                     ->withErrors($erro)
                     ->withInput(Input::except('password'));
             }
         } else {
+
             // CADASTRO NORMAL
-            $idEstado = $this->getEstado(Input::get('txES'));
-            $idCidade = $this->getCidade(Input::get('txCid'), $idEstado);
+            $Estado = Input::get('txES');
+            $idCidade = $this->getCidade(Input::get('txCid'), $Estado);
             $idBairro = $this->getBairro(Input::get('Bairro'), $idCidade);
 
             $idLogradouro = $this->gettidLogradouro($idCidade, $idTpLogra);
@@ -227,42 +230,30 @@ echo '72'; die;
             $pessoa->Nome     = $Nome;
             $pessoa->email    = Input::get('email');
             $pessoa->user     = Input::get('user');
-
             $idPedido = Input::get('idPedido');
-
-            // $Tpe=0;
             $pessoa->FaceID = $FaceID;
             if ($pessoa->FaceID>0) {
-            }
 
+            }
             $idRede = Input::get('idRede');
             if ($idRede>0) {
                 $pessoa->RedeID =$idRede;
             }
-            $this->loga('idRede:'.$idRede);
-
             $pessoa->fone = Input::get('fone');
-
-            // $pessoa->password = Input::get('password');
             $pessoa->password = Hash::make(Input::get('password'));
-
             $pessoa->Cep      = Input::get('txCep');
-            // $pessoa->bitcoin  = Input::get('bitcoin');
             $pessoa->remember_token = Input::get('remember_token');
-            // $pessoa->EnderDesc = Input::get('EnderDesc');
             $pessoa->Endereco_ID = $idEndereco;
-
-            $pessoa->idCaptador =  Input::get('remember_token');
-
+            $pessoa->idCaptador =  Input::get('idCaptador');
             $pessoa->save();
             $ultPessoa = DB::table('users')->max('id');
-
+            $cProd = new Produtos();
+            $Tem = $cProd->VeSeTemCidDoCliente($pessoa->Cep, $idCidade);
+            $compl = "?id=".$ultPessoa."&ln=".$this->LograNovo."&tl=".$Tem;
             if ($tpEnder=='E') {
-
                 $this->loga('tpEnder=E 2');
                 Auth::loginUsingId($ultPessoa);
                 Session::put('iduser', $ultPessoa);
-                // echo 'logou '.$ultPessoa; die;
 
                 // MUDAR AQUI
                 Session::put('Nome',$Nome);
@@ -288,7 +279,7 @@ echo '72'; die;
                         $url = Session::get('url');
                     }
                     if ($url=='/pessoa') {
-                        $url='perfil';
+                        $url='perfil'.$compl;
                     }
                     return Redirect::to($url);
                 }
@@ -313,23 +304,8 @@ echo '72'; die;
                     Auth::loginUsingId($ultPessoa);
                     $MensAdicUser = 'Usuário adicionado com sucesso!<Br>Voce já pode realizar suas compras';
                 }
-                $cProd = new Produtos();
-                $Tem = $cProd->VeSeTemCidDoCliente($pessoa->Cep, $idCidade);
-                if ($Tem>0) {
-                    $MensAdicUser.='<Br><Br>Estamos felizes em informar que EXISTEM fornecedores nossos que atendem a sua região';
-                } else {
-                    $MensAdicUser.='<Br><Br>Iremos lhe avisar quando existirem fornecedores que atendam sua região<Br>';
-                }
-
-                // $MensAdicUser.='<Br><Br>Caso deseja ser nosso fornecedor ou representante entre em contato pelo email: xeviousbr@gmail.com';
-                // Session::flash('message', $MensAdicUser);
-
                 Auth::loginUsingId($ultPessoa);
-                // Session::put('iduser', $ultPessoa);
-
-                // echo 'logou '.$ultPessoa; die;
-
-                return Redirect::to('perfil');
+                return Redirect::to('perfil'.$compl);
             }
         }
     }
@@ -358,17 +334,22 @@ echo '72'; die;
 
     }
 
+    public function show($id)
+    {
+        // get the nerd
+        $pessoa = Pessoa::find($id);
+       
+        //SE O RETURN VIEW DEBAIXO NÃO FUNCIONAR COLOQUE ESTE:
+        //return view('pessoa.show')->with('pessoa', $pessoa);
 
+        // show the view and pass the nerd to it
+        return View::make('pessoa.show')
+            ->with('pessoa', $pessoa );
+    }
 
     public function edit($id)
     {
-
-        // echo "aqui"; die;
-
-        // get the nerd
         $pessoa = Pessoa::find($id);
-
-        // show the edit form and pass the nerd
         return View::make('pessoa.edit')
             ->with('pessoa', $pessoa);
     }
@@ -430,30 +411,31 @@ echo '72'; die;
     }
 
     private function getEstado($ES) {
-        $Cons = DB::table('estado')
+        $Cons = DB::table('cep_estado')
             ->select('ID')
-            ->where('Sigla', '=', $ES)
+            ->where('sigla', '=', $ES)
             ->first();
         return $Cons->ID;
     }
 
-    private function getCidade($Cid, $idEst) {
-        $Cons = DB::table('cidade')
-            ->select('ID')
-            ->where('NomeCidade', '=', $Cid)
-            ->where('Estado_ID', '=', $idEst)
+    private function getCidade($Cid, $Sigla) {
+        $Cons = DB::table('cep_cidade')
+            ->select('id_cidade as ID')
+            ->where('cidade', '=', $Cid)
+            ->where('estado', '=', $Sigla)
             ->first();
         return $Cons->ID;
     }
 
     private function getBairro($Bairro, $idCidade) {
-        $Cons = DB::table('bairro')
-            ->select('id')
-            ->where('NomeBairro', '=', $Bairro)
-            ->where('idcidade', '=', $idCidade)
+        $Cons = DB::table('cep_bairro')
+            ->select('id_bairro as id')
+            ->where('bairro', '=', $Bairro)
+            ->where('cidade_id', '=', $idCidade)
             ->first();
         if ($Cons==null) {
-            $idbairro = DB::table('bairro')->max('id')+1;
+            echo 'fazer a adição de bairro'; die;
+            $idbairro = DB::table('bairro')->max('id_bairro')+1;
             DB::update("insert into bairro (id, NomeBairro, idCidade) values (".$idbairro.", '".$Bairro."', ".$idCidade.")");
         } else {
             $idbairro = $Cons->id;
@@ -483,12 +465,10 @@ echo '72'; die;
         $sql.="where LOWER(nometplog) = '".$TpLogra."'";
         $qry = DB::select( DB::raw($sql));*/
         $qry = $this->ConsTpLogr($TpLogra);
-
         if ($qry!=null) {
             $tam = strlen($Texto);
             $this->logradouro = ltrim(substr($Texto, $posE, $tam-$posE+1));
             return $qry[0]->ID;
-            // return $Cons->ID;
         } else {
             echo "Tipo de Logradouro imprevisto"; die;
         }
@@ -513,17 +493,18 @@ echo '72'; die;
 
     private function gettidLogradouro($idCidade, $idTpLogra) {
         $sql = "select ID ";
-        $sql.="from logradouro ";
+        $sql.="from logra ";
         $sql.="where NomeLog = '".$this->logradouro;
         $sql.="' and Cidade_ID = ".$idCidade;
         $qry = DB::select( DB::raw($sql));
         if ($qry==null) {
-            DB::insert('insert into logradouro (NomeLog, TpLogradouro_ID, Cidade_ID) values (?, ?, ?)', [
+            DB::insert('insert into logra (NomeLog, TpLogradouro_ID, Cidade_ID) values (?, ?, ?)', [
                 $this->logradouro,
                 $idTpLogra,
                 $idCidade
             ]);
-            $idLogradouro = DB::table('logradouro')->max('ID');
+            $idLogradouro = DB::table('logra')
+                ->max('ID');
             $this->LograNovo=1;
             // $this->MensAdicUser = 'Seu cadastro foi adicionado, mas seu endereço precisa ser confirmado<p>será avisado por email quando tiver ocorrido';
         } else {
@@ -535,14 +516,7 @@ echo '72'; die;
     }
 
     private function getEndereco($idBairro, $idLogra, $scep, $Numero, $Complemento, $idCidade) {
-        /*        $ConsC = DB::table('cep')
-                    ->select('ID')
-                    ->where('NrCep', '=', $scep)
-                    ->first();
-                $idCep = $ConsC->ID;*/
-
         $idCep = $this->getCep($scep, $idBairro, $idCidade);
-
         $sql = "select ID ";
         $sql.= "from endereco ";
         $sql.= "where Logradouro_ID = ".$idLogra;
@@ -558,7 +532,7 @@ echo '72'; die;
             $idEnder = $qry[0]->ID;
         } else {
             if ($tamC>0) {
-                DB::insert('insert into endereco (idBairro, Logradouro_ID, idCep, Numero, Complemento) values (?, ?, ?, ?, ?)', [
+                DB::insert('insert into endereco (idBairro, Logradouro_ID, CEP, Numero, Complemento) values (?, ?, ?, ?, ?)', [
                     $idBairro,
                     $idLogra,
                     $idCep,
@@ -566,7 +540,7 @@ echo '72'; die;
                     $Complemento
                 ]);
             } else {
-                DB::insert('insert into endereco (idBairro, Logradouro_ID, idCep, Numero) values (?, ?, ?, ?)', [
+                DB::insert('insert into endereco (idBairro, Logradouro_ID, CEP, Numero) values (?, ?, ?, ?)', [
                     $idBairro,
                     $idLogra,
                     $idCep,
@@ -588,22 +562,21 @@ echo '72'; die;
 
     private function getCep($scep, $idbairro, $idCidade) {
         $ConsC = DB::table('cep')
-            ->select('ID')
-            ->where('NrCep', '=', $scep)
+            ->select('id')
+            ->where('cep', '=', $scep)
             ->first();
         if ($ConsC==null) {
             $cCep = new Cep;
             $cCep->GetCoordenadas($scep, 'cad');
             $idCep = DB::table('cep')->max('id');
         } else {
-            $idCep = $ConsC->ID;
+            $idCep = $ConsC->id;
         }
         return $idCep;
     }
 
-    /* public function perfil()
-    {
-        return View::make('pessoa.perfil');
-    } */
+    public function create() {
+        // não faz nada no create
+    }
 
 }

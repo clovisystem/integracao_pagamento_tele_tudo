@@ -100,8 +100,8 @@ class Entrega extends Model
     private function DadosEmpresa ($Empresax_ID) {
         $ConsF = DB::table('empresa')
             ->join('endereco', 'endereco.ID', '=', 'empresa.idEndereco')
-            ->join('logradouro', 'logradouro.ID', '=', 'endereco.Logradouro_ID')
-            ->join('tplogradouro', 'tplogradouro.ID', '=', 'logradouro.TpLogradouro_ID')
+            ->join('logra', 'logra.ID', '=', 'endereco.Logradouro_ID')
+            ->join('tplogradouro', 'tplogradouro.ID', '=', 'logra.TpLogradouro_ID')
             ->join('bairro', 'bairro.id', '=', 'endereco.idBairro')
             ->join('cidade', 'cidade.ID', '=', 'bairro.idcidade')
             ->join('estado', 'estado.ID', '=', 'cidade.Estado_ID')
@@ -109,7 +109,7 @@ class Entrega extends Model
             ->join('cep', 'cep.id', '=', 'endereco.idCep')
             ->select('empresa.Empresa','empresa.Telefone','empresa.EntregaFree',
                 'endereco.Numero','endereco.Complemento',
-                'logradouro.NomeLog',
+                'logra.NomeLog',
                 'tplogradouro.nometplog',
                 'bairro.NomeBairro',
                 'cidade.NomeCidade',
@@ -149,8 +149,8 @@ class Entrega extends Model
     private function DadosCliente ($idCliente) {
         $ConsP = DB::table('users')
             ->join('endereco', 'endereco.ID', '=', 'users.Endereco_ID')
-            ->join('logradouro', 'logradouro.ID', '=', 'endereco.Logradouro_ID')
-            ->join('tplogradouro', 'tplogradouro.ID', '=', 'logradouro.TpLogradouro_ID')
+            ->join('logra', 'logra.ID', '=', 'endereco.Logradouro_ID')
+            ->join('tplogradouro', 'tplogradouro.ID', '=', 'logra.TpLogradouro_ID')
             ->join('bairro', 'bairro.id', '=', 'endereco.idBairro')
             ->join('cidade', 'cidade.ID', '=', 'bairro.idcidade')
             ->join('estado', 'estado.ID', '=', 'cidade.Estado_ID')
@@ -158,7 +158,7 @@ class Entrega extends Model
             ->join('cep', 'cep.NrCep', '=', 'users.CEP')
             ->select('users.Nome','users.fone'
                 ,'endereco.Numero','endereco.Complemento',
-                'logradouro.NomeLog',
+                'logra.NomeLog',
                 'tplogradouro.nometplog',
                 'bairro.id as BairroID','bairro.NomeBairro',
                 'cidade.NomeCidade',

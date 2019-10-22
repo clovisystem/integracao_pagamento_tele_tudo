@@ -74,7 +74,7 @@ $atu=0;
 				    break;
 				case 7:
 				    // Seta como logradouro aceito
-				    DB::update('update logradouro set adic  = 0 where ID = '.$id);
+				    DB::update('update logra set adic  = 0 where ID = '.$id);
 				    break;
 				case 8:
 				    // Listar os coringas

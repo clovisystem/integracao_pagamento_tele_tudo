@@ -158,12 +158,8 @@ class Cep extends Model
 
                 // Session::forget('CID');
                 $Conscep = DB::table('cep')
-                    ->select('lat', 'lon', 'idBairro', 'idCidade')
-                    ->where('NrCep', '=', $cep_tmp)
-
-                    ->where('idPais', '=', 1)
-                    // ->where('idPais', '=', $this->idPais)
-
+                    ->select('latitude as lat', 'longitude as lon', 'bairro_id as idBairro', 'cidade_id as idCidade')
+                    ->where('cep', '=', $cep_tmp)
                     ->first();
                 $ok=0;
                 if (is_null($Conscep)) {
@@ -192,19 +188,15 @@ class Cep extends Model
                     $this->setLocal($Conscep->idBairro, $Conscep->idCidade);
                     if ($Conscep->idCidade==null) {
                         $ConsBairro = DB::table('cep')
-                            ->select('bairro.idcidade')
-                            ->join('bairro', 'bairro.ID', '=', 'cep.idBairro')
-                            ->where('NrCep', '=', $cep_tmp)
-                            ->where('idPais', '=', $this->idPais)
+                            ->select('cep_bairro.cidade_id')
+                            ->join('cep_bairro', 'cep_bairro.id', '=', 'cep.bairro_id')
+                            ->where('cep', '=', $cep_tmp)
                             ->first();
-
                         if ($ConsBairro!=null) {
                             $this->idcidade = $ConsBairro->idcidade;
-                            // Session::put('CID', $ConsBairro->idcidade);
                         }
                     } else {
                         $this->idcidade = $Conscep->idCidade;
-                        // Session::put('CID', $Conscep->idCidade);
                     }
                 }
             }
@@ -282,10 +274,10 @@ class Cep extends Model
 
     private function setLocal($idBairro, $idCidade) {
         if ($idBairro != null) {
-            $ConsLocal = DB::table('bairro')
-                ->join('cidade', 'cidade.ID', '=', 'bairro.idcidade')
-                ->select('bairro.NomeBairro', 'cidade.NomeCidade', 'cidade.ID')
-                ->where('bairro.id', '=', $idBairro)
+            $ConsLocal = DB::table('cep_bairro')
+                ->join('cep_cidade', 'cep_cidade.id_cidade', '=', 'cep_bairro.cidade_id')
+                ->select('cep_bairro.bairro as NomeBairro', 'cep_cidade.cidade as NomeCidade', 'cep_cidade.id_cidade as ID')
+                ->where('cep_bairro.id_bairro', '=', $idBairro)
                 ->first();
             if ($ConsLocal!=null) {
                 $ConsLocal = 'Localidade: '.$this->acento_para_html($ConsLocal->NomeBairro).' / '.$this->acento_para_html($ConsLocal->NomeCidade);
@@ -405,11 +397,6 @@ class Cep extends Model
             if ($cids->idBairro!=null) {$this->idBai = $cids->idBairro; }
         }
 
-        /*echo 'idCidade='.$idCid.'</p>';
-        echo 'idBairro='.$this->idBai.'</p>';
-        echo 'dist='.$dist;
-        die; */
-
         if ($dist<10) {
 
             // echo 'dist='.$dist.'</p>';
@@ -472,131 +459,6 @@ class Cep extends Model
         return $umarray;
     }
 
-    /*
-    public function BuscaEnderPeloCep1($cep) {
-        $Logra='';
-        $Sigla= '';
-        $Cidade = '';
-        $Bairro = '';
-        $qtRuas=0;
-
-        // Verifica se tem cep, em modo completo
-        $ConsCep = DB::table('cep')
-            ->select('cep.id','Sigla', 'NomeCidade','NomeBairro', 'bairro.ID as BairroID')
-            ->join('bairro', 'bairro.ID', '=', 'cep.idBairro')
-            ->join('cidade', 'cidade.ID', '=', 'bairro.idcidade')
-            ->join('estado', 'estado.ID', '=', 'cidade.Estado_ID')
-            ->where('NrCep', '=', $cep)
-            ->first();
-
-        // $LograOK="<input type='text' name='txLogra' id='txLogra' style='display: block'>";
-        $LograOK ="<div class='form-group'><select required data-live-search='true' >";
-        $LograOK.="<option 'Escolha'>Clique aqui para escolher</option>";
-
-        if ($ConsCep!=null) {
-
-            $Sigla= $ConsCep->Sigla;
-            $Cidade = $ConsCep->NomeCidade;
-            $Bairro = $ConsCep->NomeBairro;
-
-            // Selecionar os logradouros daquele bairro
-            $sql = "Select DISTINCT logradouro.NomeLog, tplogradouro.nometplog ";
-            $sql.= "From ";
-            $sql.= "( SELECT DISTINCT Logradouro_ID ";
-            $sql.= "FROM endereco ";
-            $sql.= "Where idBairro = ".$ConsCep->BairroID;
-            $sql.= " ) as X ";
-            $sql.= "Inner Join logradouro on logradouro.ID = X.Logradouro_ID ";
-            $sql.= "Inner Join tplogradouro on tplogradouro.ID = logradouro.TpLogradouro_ID ";
-            $sql.= "Order by logradouro.NomeLog ";
-            $qry_log = DB::select( DB::raw($sql));
-            $Logra=$LograOK;
-            foreach ($qry_log as $log) {
-                $lugar = $log->nometplog." ".$log->NomeLog;
-                $Logra.="<option data-tokens='$lugar'>$lugar</option>";
-                $qtRuas++;
-            }
-            $Logra.="<option 'NÃO ESTA NA LISTA - IREI INFORMAR'>NÃO ESTA NA LISTA - IREI INFORMAR</option>";
-            $Logra.="</select></div>";
-            $BaiRO=" readonly='readonly' ";
-            $OK=1;
-        } else {
-
-            // Verifica se a cep só pela cidade
-            $ConsCep = DB::table('cep')
-                ->select('cep.id','Sigla', 'NomeCidade','cidade.ID as CidadeID','Sigla')
-                ->join('cidade', 'cidade.ID', '=', 'cep.idCidade')
-                ->join('estado', 'estado.ID', '=', 'cidade.Estado_ID')
-                ->where('NrCep', '=', $cep)
-                ->first();
-
-            if ($ConsCep!=null) {
-
-                // Seleciona logradouros da cidade
-                $ConsLog= DB::table('logradouro')
-                    ->select('NomeLog','nometplog')
-                    ->join('tplogradouro', 'tplogradouro.ID', '=', 'logradouro.TpLogradouro_ID')
-                    ->where('Cidade_ID', '=', $ConsCep->CidadeID)
-                    ->get();
-
-                $Logra=$LograOK;
-                foreach ($ConsLog as $log) {
-                    $lugar = $log->nometplog." ".$log->NomeLog;
-                    $Logra.="<option data-tokens='$lugar'>$lugar</option>";
-                    $qtRuas++;
-                }
-                $Logra.="<option 'NÃO ESTA NA LISTA - IREI INFORMAR'>NÃO ESTA NA LISTA - IREI INFORMAR</option>";
-                $Logra.="</select></div>";
-                $Sigla= $ConsCep->Sigla;
-                $Cidade = $ConsCep->NomeCidade;
-                $Bairro = "";
-                $BaiRO='';
-                $OK=2;
-            } else {
-                if ($this->PeloGoogle($cep)=="OK") {
-                    $Sigla= $this->Sigla;
-                    $Cidade = $this->NmCidade;
-                    $Bairro = $this->NomeBairro;
-                    $OK=3;
-                    $idCidade = $this->GravaCidade($Cidade, $Sigla);
-                    if ($Bairro>'') {
-                        $idBairro = $this->GravaBairro($Bairro, $idCidade);
-                        $BaiRO=" readonly='readonly' ";
-                    } else {
-                        $idBairro = 'null';
-                        $BaiRO='';
-                    }
-
-                    // CEP (pode ser que já tenha)
-                    $Cons = DB::table('cep')
-                        ->select('id')
-                        ->where('NrCep', '=', $cep)
-                        ->first();
-                    if ($Cons==null) {
-                        DB::insert("insert into cep (NrCep, lat, lon, data, idPais, idBairro, idCidade) values (?, ?, ?, ?, ?, ?, ?)", [$cep, $this->getLat(), $this->getLong(), new DateTime, 1, $idBairro, $idCidade]);
-                    } else {
-                        DB::update("update cep set idBairro = ".$idBairro.", idCidade = ".$idCidade." Where id = ".$Cons->id);
-                    }
-                } else {
-                    $OK=0;
-                }
-            }
-        }
-
-        if ($BaiRO=='') { $tpEnder="C"; } else { $tpEnder="R"; }
-
-        $JS = ['OK' => $OK,
-            'Estado' => $Sigla,
-            'Cidade' => $Cidade,
-            'Bairro' => $Bairro,
-            'Logra' => $Logra,
-            'tpEnder' => $tpEnder,
-            'qtRuas' => $qtRuas
-        ];
-        $results = json_encode($JS);
-        return $results;
-    }
-    */
     public function BuscaEnderPeloCep($cep,$M) {
         $Logra='';
         $Sigla= '';
@@ -606,11 +468,12 @@ class Cep extends Model
 
         // Verifica se tem cep, em modo completo
         $ConsCep = DB::table('cep')
-            ->select('cep.id','Sigla', 'NomeCidade','NomeBairro', 'bairro.ID as BairroID')
-            ->join('bairro', 'bairro.ID', '=', 'cep.idBairro')
-            ->join('cidade', 'cidade.ID', '=', 'bairro.idcidade')
-            ->join('estado', 'estado.ID', '=', 'cidade.Estado_ID')
-            ->where('NrCep', '=', $cep)
+            ->select('cep.id',
+                'cep_cidade.estado as Sigla', 'cep_cidade.cidade as NomeCidade'
+                ,'cep_bairro.bairro as NomeBairro', 'cep_bairro.id_bairro as BairroID')
+            ->join('cep_bairro', 'cep_bairro.id_bairro', '=', 'cep.bairro_id')
+            ->join('cep_cidade', 'cep_cidade.id_cidade', '=', 'bairro.cidade_id')
+            ->where('Cep', '=', $cep)
             ->first();
 
         // $LograOK="<input type='text' name='txLogra' id='txLogra' style='display: block'>";
@@ -624,15 +487,15 @@ class Cep extends Model
             $Bairro = $ConsCep->NomeBairro;
 
             // Selecionar os logradouros daquele bairro
-            $sql = "Select DISTINCT logradouro.NomeLog, tplogradouro.nometplog ";
+            $sql = "Select DISTINCT logra.NomeLog, tplogradouro.nometplog ";
             $sql.= "From ";
             $sql.= "( SELECT DISTINCT Logradouro_ID ";
             $sql.= "FROM endereco ";
             $sql.= "Where idBairro = ".$ConsCep->BairroID;
             $sql.= " ) as X ";
-            $sql.= "Inner Join logradouro on logradouro.ID = X.Logradouro_ID ";
-            $sql.= "Inner Join tplogradouro on tplogradouro.ID = logradouro.TpLogradouro_ID ";
-            $sql.= "Order by logradouro.NomeLog ";
+            $sql.= "Inner Join logra on logra.ID = X.Logradouro_ID ";
+            $sql.= "Inner Join tplogradouro on tplogradouro.ID = logra.TpLogradouro_ID ";
+            $sql.= "Order by tplogradouro.nometplog, logra.NomeLog ";
             $qry_log = DB::select( DB::raw($sql));
             $Logra=$LograOK;
             foreach ($qry_log as $log) {
@@ -640,6 +503,7 @@ class Cep extends Model
                 $Logra.="<option data-tokens='$lugar'>$lugar</option>";
                 $qtRuas++;
             }
+
             $Logra.="<option 'NÃO ESTA NA LISTA - IREI INFORMAR'>NÃO ESTA NA LISTA - IREI INFORMAR</option>";
             $Logra.="</select></div>";
             $BaiRO=" readonly='readonly' ";
@@ -657,9 +521,9 @@ class Cep extends Model
             if ($ConsCep!=null) {
 
                 // Seleciona logradouros da cidade
-                $ConsLog= DB::table('logradouro')
+                $ConsLog= DB::table('logra')
                     ->select('NomeLog','nometplog')
-                    ->join('tplogradouro', 'tplogradouro.ID', '=', 'logradouro.TpLogradouro_ID')
+                    ->join('tplogradouro', 'tplogradouro.ID', '=', 'logra.TpLogradouro_ID')
                     ->where('Cidade_ID', '=', $ConsCep->CidadeID)
                     ->get();
 
@@ -679,35 +543,6 @@ class Cep extends Model
             } else {
                 $BaiRO='';
                 $OK=0;
-
-                /* if ($this->PeloGoogle($cep)=="OK") {
-                    $Sigla= $this->Sigla;
-                    $Cidade = $this->NmCidade;
-                    $Bairro = $this->NomeBairro;
-                    $OK=3;
-                    $idCidade = $this->GravaCidade($Cidade, $Sigla);
-                    if ($Bairro>'') {
-                        $idBairro = $this->GravaBairro($Bairro, $idCidade);
-                        $BaiRO=" readonly='readonly' ";
-                    } else {
-                        $idBairro = 'null';
-                        $BaiRO='';
-                    }
-
-                    // CEP (pode ser que já tenha)
-                    $Cons = DB::table('cep')
-                        ->select('id')
-                        ->where('NrCep', '=', $cep)
-                        ->first();
-                    if ($Cons==null) {
-                        DB::insert("insert into cep (NrCep, lat, lon, data, idPais, idBairro, idCidade) values (?, ?, ?, ?, ?, ?, ?)", [$cep, $this->getLat(), $this->getLong(), new DateTime, 1, $idBairro, $idCidade]);
-                    } else {
-                        DB::update("update cep set idBairro = ".$idBairro.", idCidade = ".$idCidade." Where id = ".$Cons->id);
-                    }
-                } else {
-                    $OK=0;
-                } */
-
             }
         }
 

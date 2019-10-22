@@ -67,6 +67,10 @@ Route::post('pagamentos/credito', 'OthersOptionsController@Aciona');
 
 Route::post('checkout', 'OthersOptionsController@Checkout');
 
+Route::get('checkout', 'OthersOptionsController@Checkout');
+
+Route::post('store', 'OthersOptionsController@Store');
+
 Route::get('/{site}', 'PaginaController@aciona');//DEVE FICAR COMO ĹTIMA OPÇÃO SENÃO VAI PEGAR TODAS AS ROTAS QUE ESCREVER
 
 

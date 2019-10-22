@@ -2,6 +2,11 @@
     
 namespace App;
 
+use Cookie;
+use Hash;
+use Illuminate\Support\Facades\DB;
+use Session;
+use Validator;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -34,9 +39,9 @@ class Clientes extends Model
 
     public function EnderOK ($idUser) {
         $qry = DB::table('users')
-            ->select('logradouro.adic')
+            ->select('logra.adic')
             ->join('endereco', 'endereco.ID', '=', 'users.Endereco_ID')
-            ->join('logradouro', 'logradouro.ID', '=', 'endereco.Logradouro_ID')
+            ->join('logra', 'logra.ID', '=', 'endereco.logra_ID')
             ->where('users.id', '=', $idUser)
             ->first();
         if ($qry->adic==1) {
@@ -50,8 +55,8 @@ class Clientes extends Model
         $Cons = DB::table('users')
             ->select('cep_bairro.NomeBairro','cep_bairro.id_bairro as id')
             ->join('endereco', 'endereco.ID', '=', 'users.Endereco_ID')
-            ->join('logradouro', 'logradouro.ID', '=', 'endereco.Logradouro_ID')
-            ->join('bairro', 'cep_bairro.cidade_id', '=', 'logradouro.Cidade_ID')
+            ->join('logra', 'logra.ID', '=', 'endereco.logra_ID')
+            ->join('bairro', 'cep_bairro.cidade_id', '=', 'logra.Cidade_ID')
             ->where('users.id','=',$idUser)
             ->orderBy('cep_bairro.NomeBairro')
             ->get();

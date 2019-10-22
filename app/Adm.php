@@ -104,19 +104,19 @@ class Adm extends Model
             ->where('logradouro.adic', '=', 1)
             ->get(); */
 
-        $qry = DB::table('logradouro')
+        $qry = DB::table('logra')
             ->select('users.Nome','users.Cep','users.email',
                 'tplogradouro.nometplog',
-                'logradouro.NomeLog','logradouro.ID',
+                'logra.NomeLog','logra.ID',
                 'endereco.Numero',
                 'bairro.NomeBairro',
                 'cidade.NomeCidade')
-            ->join('endereco', 'endereco.Logradouro_ID', '=', 'logradouro.ID')
+            ->join('endereco', 'endereco.Logradouro_ID', '=', 'logra.ID')
             ->join('users', 'users.Endereco_ID', '=', 'endereco.ID')
-            ->join('tplogradouro', 'tplogradouro.ID', '=', 'logradouro.TpLogradouro_ID')
+            ->join('tplogradouro', 'tplogradouro.ID', '=', 'logra.TpLogradouro_ID')
             ->join('bairro', 'bairro.id', '=', 'endereco.idBairro')
             ->join('cidade', 'cidade.ID', '=', 'bairro.idcidade')
-            ->where('logradouro.adic', '=', 1)
+            ->where('logra.adic', '=', 1)
             ->get();
         if ($qry==null) {
             $ret= "Sem Novos Endereços<Br>";
