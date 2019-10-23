@@ -167,18 +167,17 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
             {!! Csrf_Field() !!}   
             {{ method_field('POST') }}
        
-      
+
         
     
-            <span style="visibility:hidden;">{{ $valor = '5.00' }}</span><!--PARA TESTES DE VALORES COM O SELECT -->
-            <div class="form-group">
+                        <div class="form-group">
                 <div id="form-agrupado">
                     <div class="field-container">
                         <label for="name">Nome</label>
                         <input name="name" id="name" class="form-control" maxlength="80" type="text" value="{{ $Nome }}">
                         <label for="aviso" class="btn btn-warning">Verifique se o nome está igual ao do cartão de crédito</label>
                         <!--<input name="id" class="form-control" maxlength="80" type="hidden" value="{{ $id }}">-->
-                        <input name="id_transacao" class="form-control" maxlength="80" type="hidden" value="{{ $id_transacao }}">
+                        <input name="IDPED" class="form-control" maxlength="80" type="hidden" value="{{ $IDPED }}">
                         <!--<input name="valor" class="form-control" maxlength="80" type="hidden" value="{{ $valor }}">-->
                         @if($valor >= 1000.00)
                         <select name="valor" id="valor" class-"form-control">

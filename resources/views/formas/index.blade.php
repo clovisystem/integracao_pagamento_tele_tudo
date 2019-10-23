@@ -68,11 +68,18 @@ if ($Teste==1) {
 
 
 
-$Ped = $_GET['ped']='2156'; // VEM DA VIEW PEDIDOS/INDEX - RETIRAR O VALOR AO LADO EM TEMPO DE PRODUÇÃO
+$IDPED = $_GET['ped']='1'; // VEM DA VIEW PEDIDOS/INDEX - RETIRAR O VALOR AO LADO EM TEMPO DE PRODUÇÃO
 
 //$Valor = Session::get('VLRTOTAL'); //O CODIGO AO LADO SÓ DEVE SER USADO EM PRODUÇÃO, EM DESENVOLVIMENTO COMENTE!
 $Descricao = 'DVD Independence Day';
 $Valor = '20.00';
+$tpEnt = '1';
+$VlrEntrega = '20.00';
+
+
+
+
+
 //$Valor = $Valor * 100;
 $Id_carteira = "xeviousbr@gmail.com";
 $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
@@ -90,11 +97,13 @@ $estado = 'SP';
 
 
 
+
 //, compact(Id_carteira, Valor, Ped, Nome -> ESTAVE NO ROUTE DA ACTION DO FORM
 ?>
 
 <!--<form action="https://www.moip.com.br/PagamentoMoIP.do" method="POST">-->
-<form action="/pagamentos/credito" method="POST">
+<!--<form action="/pagamentos/credito" method="POST">FOI DESATIVADO TEMPORARIAMENTE PARA TESTAR A ACTION DE CONFIRMAÇÃO DE TELE-ENTREGA-->
+<form action="/confirma" method="POST">
     {!! Csrf_Field() !!}
     
     {{ method_field('POST') }}
@@ -107,7 +116,11 @@ $estado = 'SP';
 
     <input type="hidden" name="descricao"  value="{{$Descricao}}">
 
-    <input type="hidden" name="id_transacao"  value="{{$Ped}}">
+    <input type="hidden" name="tpEnt"  value="{{$tpEnt}}">
+
+    <input type="hidden" name="IDPED"  value="{{$IDPED}}">
+
+    <input type="hidden" name="VlrEntrega"  value="{{$VlrEntrega}}">
 
     <input type="hidden" name="user"  value="{{$user}}">
 

@@ -1,4 +1,4 @@
-<?php $idUser = 0; ?>
+<?php $idUser = 21; ?>
 
 
 @extends('layouts.padrao')
@@ -15,33 +15,48 @@
         }
         document.write("<"+nH+">Confirmação do acionamento da entrega</"+nH+">");
     </script>
+
+
     <?php
-    
+
+$Descricao = 'DVD Independence Day';
+$Valor = '20.00';
+//$Valor = $Valor * 100;
+$Id_carteira = "xeviousbr@gmail.com";
+$Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
+$User = 'teste';
+$email = 'teste@teste.com';
     
     $cEntrega = new App\Entrega();
-    $idPedido = $_GET['IDPED'];
+    $idPedido = $_POST['IDPED']; //MUDOU DE GET PARA POST
+    $tpEnt = $_POST['tpEnt'];
+    $VlrEntrega = $_POST['VlrEntrega'];
     Session::put('IDPED', $idPedido);
-    $VlrEntrega = 0;
+    Session::put('ENTREGA', $tpEnt);
+    //$VlrEntrega = 0;
     if (Session::has('VlrEntrega')) {
         $VlrEntrega = Session::get('VlrEntrega');
     }
-    $idEntrega = Session::get('ENTREGA');
+    $idEntrega = $tpEnt; //Session::put('ENTREGA');
     $cEntrega->setidEntrega($idEntrega);
     $cEntrega->setVlrEntrega($VlrEntrega,"pedido\index");
     $vValorTotal = $cEntrega->getValorTotal($idPedido);
     Session::put('VLRTOTAL', $vValorTotal);
     $ValorTotal = number_format($vValorTotal, 2, ',', '.');
-    $idPedido = 0;
+    //$idPedido = 0;
     if (Session::has('PED')) {
         $idPedido = Session::get('PED');
     }
     $ValorEntrega = $cEntrega->getNossaCobranca($idPedido);
     Session::put('VlrEntrega', $ValorEntrega);
     ?>
+
     <div class="alert alert-success">Compras R$ {{ number_format($cEntrega->getCompras($idPedido), 2, ',', '.') }}</div>
     <div class="alert alert-success">Tele-Entrega R$ {{ $ValorEntrega }}</div>
-    <div class="alert alert-success">Valor Total R$ {{ $ValorTotal }}</div>
-    <input id="hPd" type="text" hidden="hidden" value="{{ $idPedido }}" /></p>
+    <div class="alert alert-success"><input id="ValorTotal" name="ValorTotal" type="text" value="Valor Total R$ {{ $ValorTotal }}" style="border:none; background:transparent;"/><!--Valor Total R$ {{ $ValorTotal }}--></div>
+    <input id="IDPED" name="IDPED" type="text" hidden="hidden" value="{{ $idPedido }}" /></p>
+    <input id="user" name="user" type="text"  hidden="hidden" value="{{ $User }}" /></p>
+ 
     <div>
         <table width="79%">
             <tr>
@@ -67,9 +82,9 @@
 
 
         <?php
-        $idPedido = $_GET['IDPED'];
-        if (isset($_GET['tpEnt'])) {
-            $tpEnt = $_GET['tpEnt'];
+        $idPedido = $_POST['IDPED'];
+        if (isset($_POST['tpEnt'])) {
+            $tpEnt = $_POST['tpEnt'];
         } else {
             $cSessao = new App\Sessao;
             $tpEnt = $cSessao->tpEntrega($idPedido);
@@ -78,7 +93,7 @@
         <script>
             function Pagar() {
                 var tpEnt = <?php echo $tpEnt; ?>;
-                var idPedido = <?php echo $idPedido = '2136'; ?>;
+                var idPedido = <?php echo $idPedido; ?>;
 
                 // alert(tpEnt);
                 if (tpEnt==0) {
@@ -86,7 +101,9 @@
                     document.location.assign("https://www.tele-tudo.com/formas?ped="+idPedido);
                 } else {
                     // TELE-ENTREGA PRÓPRIA
-                    document.location.assign("https://www.tele-tudo.com/pagtodireto");
+                    //document.location.assign("https://www.tele-tudo.com/pagtodireto");SUBSTITUÍ PELO DEBAIXO PARA MINHHA MAQUINA LOCAL
+                    //document.location.assign("{!! action('OthersOptionsController@Aciona') !!}");
+                    document.location.assign("{!! route('cartao.index', ['user' => $User, 'IDPED' => $idPedido, 'valor' => $ValorTotal]) !!}");
                     // document.location.assign("http://www.tele-tudo.com/resumo");
                 }
             }

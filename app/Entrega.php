@@ -86,12 +86,12 @@ class Entrega extends Model
         $qry1 = DB::table('pedido')
             ->select('pedido.User','produtos.Empresax_ID',
                 'empresa.idEntrega',
-                'cep.NrCep', 'cep.lat', 'cep.lon')
+                'cep.cep', 'cep.latitude as lat', 'cep.longitude as lon')
             ->join('pedidoItens', 'pedidoItens.idped', '=', 'pedido.idPed')
             ->join('produtos', 'produtos.ID', '=', 'pedidoItens.idprod')
             ->join('empresa', 'empresa.idEmpresa', '=', 'produtos.Empresax_ID')
             ->join('endereco', '.endereco.ID', '=', 'empresa.idEndereco')
-            ->join('cep', '.cep.ID', '=', 'endereco.idCep')
+            ->join('cep', '.cep.cep', '=', 'endereco.CEP')
             ->where('pedido.idPed', '=', $this->idPedido)
             ->get();
         return $qry1;
@@ -102,20 +102,20 @@ class Entrega extends Model
             ->join('endereco', 'endereco.ID', '=', 'empresa.idEndereco')
             ->join('logra', 'logra.ID', '=', 'endereco.Logradouro_ID')
             ->join('tplogradouro', 'tplogradouro.ID', '=', 'logra.TpLogradouro_ID')
-            ->join('bairro', 'bairro.id', '=', 'endereco.idBairro')
-            ->join('cidade', 'cidade.ID', '=', 'bairro.idcidade')
-            ->join('estado', 'estado.ID', '=', 'cidade.Estado_ID')
-            ->join('pais', 'pais.ID', '=', 'estado.idPais')
-            ->join('cep', 'cep.id', '=', 'endereco.idCep')
+            ->join('cep_bairro', 'cep_bairro.id_bairro', '=', 'endereco.idBairro')
+            ->join('cep_cidade', 'cep_cidade.id_cidade', '=', 'cep_bairro.cidade_id')
+            ->join('cep_estado', 'cep_estado.Sigla', '=', 'cep_cidade.estado')
+            ->join('pais', 'pais.ID', '=', 'cep_estado.idPais')
+            ->join('cep', 'cep.cep', '=', 'endereco.CEP')
             ->select('empresa.Empresa','empresa.Telefone','empresa.EntregaFree',
                 'endereco.Numero','endereco.Complemento',
                 'logra.NomeLog',
                 'tplogradouro.nometplog',
-                'bairro.NomeBairro',
-                'cidade.NomeCidade',
-                'estado.Nome as NomeEstado',
+                'cep_bairro.bairro as NomeBairro',
+                'cep_cidade.cidade as NomeCidade',
+                'cep_estado.estado as NomeEstado',
                 'pais.Nome as NomePais',
-                'cep.lat','cep.lon')
+                'cep.latitude as lat','cep.longitude as lon')
             ->where('empresa.idEmpresa', '=', $Empresax_ID)
             ->first();
         $this->OrcFree = $ConsF->EntregaFree;
@@ -151,20 +151,20 @@ class Entrega extends Model
             ->join('endereco', 'endereco.ID', '=', 'users.Endereco_ID')
             ->join('logra', 'logra.ID', '=', 'endereco.Logradouro_ID')
             ->join('tplogradouro', 'tplogradouro.ID', '=', 'logra.TpLogradouro_ID')
-            ->join('bairro', 'bairro.id', '=', 'endereco.idBairro')
-            ->join('cidade', 'cidade.ID', '=', 'bairro.idcidade')
-            ->join('estado', 'estado.ID', '=', 'cidade.Estado_ID')
-            ->join('pais', 'pais.ID', '=', 'estado.idPais')
-            ->join('cep', 'cep.NrCep', '=', 'users.CEP')
+            ->join('cep_bairro', 'cep_bairro.id_bairro', '=', 'endereco.idBairro')
+            ->join('cep_cidade', 'cep_cidade.id_cidade', '=', 'cep_bairro.cidade_id')
+            ->join('cep_estado', 'cep_estado.Sigla', '=', 'cep_cidade.estado')
+            ->join('pais', 'pais.ID', '=', 'cep_estado.idPais')
+            ->join('cep', 'cep.cep', '=', 'users.CEP')
             ->select('users.Nome','users.fone'
                 ,'endereco.Numero','endereco.Complemento',
                 'logra.NomeLog',
                 'tplogradouro.nometplog',
-                'bairro.id as BairroID','bairro.NomeBairro',
-                'cidade.NomeCidade',
-                'estado.Nome as NomeEstado',
+                'cep_bairro.id_bairro as BairroID','cep_bairro.bairro as NomeBairro',
+                'cep_cidade.cidade as NomeCidade',
+                'cep_estado.estado as NomeEstado',
                 'pais.Nome as NomePais',
-                'cep.lat','cep.lon')
+                'cep.latitude as lat','cep.longitude as lon')
             ->where('users.ID', '=', $idCliente)
             ->first();
         return $ConsP;
@@ -197,6 +197,7 @@ class Entrega extends Model
                 if ($ret>0) {$Tpe=1;}
                 break;
         }
+
         $this->loga('ret = '.$ret);
         if ($ret ==0) {
             $this->loga('qryE[0]->idEntrega = '.$qryE[0]->idEntrega);
@@ -255,15 +256,18 @@ class Entrega extends Model
         $lonC=$ConsC->lon; */
 
         $ConCep = DB::table('cep')
-            ->select('lat', 'lon')
-            ->where('NrCep', '=', $cep)
+            ->select('latitude as lat', 'longitude as lon')
+            ->where('cep', '=', $cep)
             ->first();
         $latC=$ConCep->lat;
         $lonC=$ConCep->lon;
 
-        $sql = "SELECT fn_distance (".$latC.", ".$lonC.", cep.lat, cep.lon) distancia ";
+        $sql = "SELECT fn_distance (".$latC.", ".$lonC.", cep.latitude, cep.longitude) distancia ";
         $sql.="from cep ";
-        $sql.="where NrCep =  ".$qryE[0]->NrCep;
+
+        $sql.="where cep =  ".$qryE[0]->cep;
+        // $sql.="where cep =  ".$qryE[0]->NrCep;
+
         $results = DB::select( DB::raw($sql));
         $Kms = $results[0]->distancia;
 
@@ -721,7 +725,8 @@ class Entrega extends Model
         $this->loga('setVlrEntrega = '.$VE.' lugar = '.$lugar);
         $this->VlrEntrega=$VE;
         if ($this->idEntrega==0) {
-            echo "this->idEntrega = 0"; die;
+            echo "lugar = ".$lugar;
+            echo " this->idEntrega = 0"; die;
         }
         DB::update("update entrega set Valor = ".$VE." where id = " .$this->idEntrega);
     }

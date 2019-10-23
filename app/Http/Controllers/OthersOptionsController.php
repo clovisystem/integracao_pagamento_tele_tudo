@@ -15,59 +15,29 @@ class OthersOptionsController extends Controller
 
     public function Aciona(Request $request){
 
-        $Valor = $request->input('valor');
-        $Descricao = $request->input('descricao');
-        $Ped = $request->input('id_transacao');
-        $User = $request->input('user');
-        $id_carteira = $request->input('id_carteira');
+        $Valor = $request->valor; //$request->valor;
+        $Descricao = 'compra'; //$request->descricao;
+        $IDPED = $request->IDPED;
+        $User = $request->user;
+        $id_carteira = 'xevious'; //$request->id_carteira;
+        //$request->all();
         $sandbox = true;
         $setID = uniqid();
-/*
-        $Valor = $_POST['valor'];
-        $Descricao = $_POST['descricao'];
-        $Ped = $_POST['id_transacao'];
-        $User = $_POST['user'];
-        $Id_Carteira = $_POST['id_carteira'];
-*/     
 
-        /*$token =  'J27IIMSM0MWSQJIXT1MDUTHZFBWMV4W2';
-        $key = 'IEVEAUWW0E4GX6FPYIEUHC7YTJEGOFNYXCEPKAER';
-        $sandbox = true;*/
+        //$IDPED = $request->idPedido;
+       
         
 
-        /*$moipPag = new MoipPagamento($token, $key, $sandbox, $Ped, $id_carteira, $User );
+             $Nome = Clientes::where('user', $User)->first()->Nome;
 
-        $scripts = $moipPag->setID($setID = uniqid())   //ID unico para identificar a compra
-                                ->setPreco($Valor)   //Preço da compra
-                                ->setDescricao($Descricao)
-                                ->addFormaPagamento(MoipPagamento::CHECKOUT_CARTAO) //Libera forma de pagamento por cartão
-                                ->getCheckoutTransparente();
-
-        /*if(!$scripts){
-            return '<link rel="stylesheet" href="css/app.css">
-            <label style="font-size:20px; color:red; margin-left:28%; margin-top:20%;">
-            Falha no pagamento, você será redirecionado a página anterior em 4 segundos</label>
-            <script>setTimeout(function(){history.go(-1);}, 4000);</script>';
-            
-            
-        }
-        else{
-            /*return view('produtos.index', [ 'id' => $setID, 
-                                            'id_transacao' => $Ped, 
-                                            'valor' => $Valor, 
-                                            'descricao' => $Descricao,
-                                            'user' => $User
-                                            ]); //ESSA VIEW DEVE VIR DEPOIS DA COLOCAÇÃO DOS DADOS DO CARTÃO ABAIXO NA PÁGINA*/
-            $Nome = Clientes::where('user', $User)->first()->Nome;
-
-            return view('pagamento.index', ['id' => $setID, 
-                                            'id_transacao' => $Ped, 
-                                            'valor' => $Valor, 
-                                            'descricao' => $Descricao,
+            return view('pagamento.index', ['id' => $setID,
                                             'User' => $User,
+                                            'sandbox' => $sandbox,
+                                            'IDPED' => $IDPED,
                                             'Nome' => $Nome,
-                                            'id_carteira' => $id_carteira,
-                                            'sandbox' => $sandbox
+                                            'descricao' => $Descricao,
+                                            'valor' => $Valor,
+                                            'id_carteira' =>$id_carteira
                                            ]); //ESSA VIEW DEVE SER USADA COM PRIORIDADE EM RELAÇÃO À DE CIMA PARA EXIBIR PÁINA ONDE O USUÁRIO INSERE INFORMAÇÕES DO CARTÂO
 
 
@@ -103,7 +73,7 @@ class OthersOptionsController extends Controller
             function sim(){
                 alert('sim');
                 
-                <?php $this::Checkout($request); ?>
+                return <?php $this::Checkout($request); ?>
                
             }
             function nao(){

@@ -24,7 +24,9 @@ Route::get('criapedido', 'PedidoController@Criapedido');
 
 Route::get('entrega', 'EntregaController@create');
 
-Route::get('confirma', 'PedidoController@Aciona');
+//Route::get('confirma', 'PedidoController@Aciona');
+
+Route::post('confirma', 'PedidoController@Aciona');
 
 Route::get('formas/{ped?}/{id?}', ['as' => 'formas', 'uses' => 'FormasController@Aciona']);
 
@@ -63,11 +65,15 @@ Route::post('pessoa', 'PessoaController@insert');
 
 Route::post('produtos/index', 'ProdutosController@Redireciona');
 
-Route::post('pagamentos/credito', 'OthersOptionsController@Aciona');
+Route::any('pagamentos/credito', 'OthersOptionsController@Aciona');
+
+Route::any('pagamento/index', [ 'as' => 'cartao.index', 'uses' => 'OthersOptionsController@Aciona' ]); 
+
+
 
 Route::post('checkout', 'OthersOptionsController@Checkout');
 
-Route::get('checkout', 'OthersOptionsController@Checkout');
+//Route::get('checkout', 'OthersOptionsController@Checkout');
 
 Route::post('store', 'OthersOptionsController@Store');
 
