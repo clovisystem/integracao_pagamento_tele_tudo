@@ -163,7 +163,7 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
 
 
 
-        <form name="form-credito"  method="post" action="/store">
+        <form name="form-credito"  method="post" action="/checkout">
             {!! Csrf_Field() !!}   
             {{ method_field('POST') }}
        
@@ -174,7 +174,7 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
                 <div id="form-agrupado">
                     <div class="field-container">
                         <label for="name">Nome</label>
-                        <input name="name" id="name" class="form-control" maxlength="80" type="text" value="{{ $Nome }}">
+                        <input name="name" id="name" class="form-control" maxlength="80" type="text" value="{{ $Nome }}" required>
                         <label for="aviso" class="btn btn-warning">Verifique se o nome está igual ao do cartão de crédito</label>
                         <!--<input name="id" class="form-control" maxlength="80" type="hidden" value="{{ $id }}">-->
                         <input name="IDPED" class="form-control" maxlength="80" type="hidden" value="{{ $IDPED }}">
@@ -215,6 +215,7 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
                         </select>
                         @else
                         <select name="valor" id="valor" class-"form-control">
+                           
                             <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
                             <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
                             <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
@@ -237,7 +238,7 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
                     <br/>   
                     <div class="field-container">
                         <label for="cardnumber">Número do Cartão</label><span id="generatecard">Generate random</span><!--GENERATE RANDOM SÓ PARA TESTES -->
-                        <input id="cardnumber" class="form-control" type="text" inputmode="numeric">
+                        <input id="cardnumber" name="cardnumber" class="form-control" type="text" inputmode="numeric" required>
                         <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -245,12 +246,12 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
                     </div>
                     <div class="field-container">
                         <label for="expirationdate">Expira em (mm/yy)</label>
-                        <input id="expirationdate" name= "expirationdate" class="form-control" type="text" pattern="\[1-12]{2}\/[0-9]{2}$">
+                        <input id="expirationdate" name= "expirationdate" class="form-control" type="text" pattern="\[1-12]{2}\/[0-9]{2}$" required>
                     
                     </div>
                     <div class="field-container">
                         <label for="securitycode">Código de segurança</label>
-                        <input id="securitycode" class="form-control" type="text" pattern="[0-9]{3}">
+                        <input id="securitycode" class="form-control" type="text" pattern="[0-9]{3}" required>
                     </div>
                     <div class="field-container">
                     

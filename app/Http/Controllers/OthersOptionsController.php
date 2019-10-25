@@ -59,32 +59,38 @@ class OthersOptionsController extends Controller
         $Nome = $request->input('name');
         $Valor = $request->input('valor');
         $Descricao = $request->input('descricao');
-        $Ped = $request->input('id_transacao');
+        $Ped = $request->input('IDPED');
         $User = $request->input('User');
         $id_carteira = $request->input('id_carteira');
         $parcelas = $request->input('parcelas');
         $sandbox = $request->input('sandbox');
-        
-        echo 'Está certo de realizar esta compra?<br><br>';
+        $cardnumber = $request->input('cardnumber');
+        $expirationdate = $request->input('expirationdate');
+        $securitycode = $request->input('securitycode');
+        //$request->all();
+        //echo 'Está certo de realizar esta compra?<br><br>';
         //$resposta = 'nao';
         // 
         ?>
         <script>
-            function sim(){
+            window.onload = function(){
+                alert('Parabéns pela sua compra ;) contiue comprando com comodidade conosco!');
+                <?php return redirect()->action('OthersOptionsController@Checkout'); ?>
+            }
+            /*function sim(){
                 alert('sim');
                 
-                return <?php $this::Checkout($request); ?>
-               
+                
             }
             function nao(){
-                alert('nao');
+                //alert('nao');
                 history.go(-1);
-            }
+            }*/
         </script>
         <?php
 
-        echo $respostaSim ='<button name="Sim" value="botao" onclick="sim()">Sim</button>';
-        echo $respostaNao ='<button name="Nao" value="botao" onclick="nao()">Não</button>';
+        /*echo $respostaSim ='<button name="Sim" value="botao" onclick="sim()">Sim</button>';
+        echo $respostaNao ='<button name="Nao" value="botao" onclick="nao()">Não</button>';*/   
        
 
         
@@ -97,16 +103,28 @@ class OthersOptionsController extends Controller
 
     public function Checkout(Request $request){
         //$id = $request->input('id');
-        $Nome = $request->Nome;
+        /*$Nome = $request->Nome;
         $Valor = $request->Valor;
         $Descricao = $request->Descricao;
         $Ped = $request->Ped;
-        $User = $request->User;
+        $User = $request->user;
         $id_carteira = $request->id_carteira;
         $parcelas = $request->parcelas;
-        $sandbox = $request->sandbox;
+        $sandbox = $request->sandbox;*/
 
-        
+        $Nome = htmlspecialchars($request->input('name'));
+        $Valor = htmlspecialchars($request->input('valor'));
+        $Valor = str_replace(',','.', $Valor);
+        $Descricao = htmlspecialchars($request->input('descricao'));
+        $Ped = htmlspecialchars($request->input('IDPED'));
+        $User = htmlspecialchars($request->input('User'));
+        $id_carteira = htmlspecialchars($request->input('id_carteira'));
+        $parcelas = htmlspecialchars($request->input('parcelas'));
+        $sandbox = htmlspecialchars($request->input('sandbox'));
+        $cardnumber = htmlspecialchars($request->input('cardnumber'));
+        $expirationdate = htmlspecialchars($request->input('expirationdate'));
+        $securitycode = htmlspecialchars($request->input('securitycode'));
+
 
 
         $token =  'J27IIMSM0MWSQJIXT1MDUTHZFBWMV4W2';
@@ -124,19 +142,16 @@ class OthersOptionsController extends Controller
         If($scripts){
             $Nome = Clientes::where('user', $User)->first()->Nome;
             //COMENTE EM PRODUÇÃO O COMANDO ABAIXO, EM TESTES COMENTE O SCRIPT DE CIMA
-            return 'Usuário: '.$User.'<br/>ID: '.$setID.'<br/>PEDIDO: '.$Ped.'<br/>VALOR R$: '.$Valor.'<br/>PARCELAS: '.$parcelas.'<br/>PRODUTO: '.$Descricao.'<br/>VENDEDOR: '.$id_carteira.'<br/>SANDBOX? '.$sandbox;
-        
+            //return 'Usuário: '.$User.'<br/>ID: '.$setID.'<br/>PEDIDO: '.$Ped.'<br/>VALOR R$: '.$Valor.'<br/>PARCELAS: '.$parcelas.'<br/>PRODUTO: '.$Descricao.'<br/>VENDEDOR: '.$id_carteira.'<br/>SANDBOX? '.$sandbox;
+         
+            
             //return 'sucesso';
-
-            /*return view('produtos.index', [ 'id' => $setID, 
-                                'id_transacao' => $Ped, 
-                                'valor' => $Valor, 
-                                'descricao' => $Descricao,
-                                'user' => $User
-                                ]); //ESSA VIEW DEVE VIR DEPOIS DA COLOCAÇÃO DOS DADOS DO CARTÃO ABAIXO NA PÁGINA*/
-                                
-
           
+             //ESSA VIEW DEVE VIR DEPOIS DA COLOCAÇÃO DOS DADOS DO CARTÃO ABAIXO NA PÁGINA*/
+                                
+            //return view('produtos.index', ['id' => $setID,'id_transacao' => $Ped, 'Valor' => $Valor,'Descricao' => $Descricao, 'User' => $User]);
+          
+            return view('produtos.index')->with(compact('setID','Ped','Valor','Descricao','User'));
         }
         else{
             /*return '<link rel="stylesheet" href="css/app.css">
@@ -150,4 +165,7 @@ class OthersOptionsController extends Controller
     }
 
 
+
 }
+
+

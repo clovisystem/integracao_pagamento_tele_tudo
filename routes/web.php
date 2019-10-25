@@ -47,6 +47,7 @@ Route::get('CriaUser', 'PessoaController@CriaUser');
 Route::resource('pessoa', 'PessoaController');
 
 Route::get('perfil', array('uses' => 'HomeController@perfil'));
+
 Route::post('perfil', array('uses' => 'HomeController@perfil'));
 
 Route::post('salvarcadastro', "PessoaController@store");
@@ -75,7 +76,7 @@ Route::post('checkout', 'OthersOptionsController@Checkout');
 
 //Route::get('checkout', 'OthersOptionsController@Checkout');
 
-Route::post('store', 'OthersOptionsController@Store');
+Route::post('store', 'OthersOptionsController@store');
 
 Route::get('/{site}', 'PaginaController@aciona');//DEVE FICAR COMO ĹTIMA OPÇÃO SENÃO VAI PEGAR TODAS AS ROTAS QUE ESCREVER
 

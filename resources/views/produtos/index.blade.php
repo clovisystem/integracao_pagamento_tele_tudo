@@ -437,11 +437,13 @@
                     <tr>
                         <td>
                         <span style="opacity:0.0;">
-                            {{ $user = Request::input('user') }}
-                            {{ $password = Request::input('password') }}
+                      
+                        
+                            <!--{{ $password = Request::input('password') }}-->
+                        {{ $User = isset($_POST['User'])?$_POST['User']:null }}    
                         </span>
-                        @if($user != '')
-                            <label for="">Parabéns, {{ $user }} pela compra de {{ $descricao }} no valor de {{ $valor }}, continue comprando com a gente!</label>
+                        @if($User != '')
+                            <label for="">Parabéns, {{ $User }} pela compra de {{ $Descricao }} no valor de {{ $Valor }}, continue comprando com a gente!</label>
                         @else
                             {{ '' }}
                         @endif

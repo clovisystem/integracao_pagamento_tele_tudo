@@ -24,7 +24,7 @@ $Valor = '20.00';
 //$Valor = $Valor * 100;
 $Id_carteira = "xeviousbr@gmail.com";
 $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
-$User = 'teste';
+$user = 'teste';
 $email = 'teste@teste.com';
     
     $cEntrega = new App\Entrega();
@@ -55,7 +55,7 @@ $email = 'teste@teste.com';
     <div class="alert alert-success">Tele-Entrega R$ {{ $ValorEntrega }}</div>
     <div class="alert alert-success"><input id="ValorTotal" name="ValorTotal" type="text" value="Valor Total R$ {{ $ValorTotal }}" style="border:none; background:transparent;"/><!--Valor Total R$ {{ $ValorTotal }}--></div>
     <input id="IDPED" name="IDPED" type="text" hidden="hidden" value="{{ $idPedido }}" /></p>
-    <input id="user" name="user" type="text"  hidden="hidden" value="{{ $User }}" /></p>
+    <input id="user" name="user" type="text"  hidden="hidden" value="{{ $user }}" /></p>
  
     <div>
         <table width="79%">
@@ -103,7 +103,7 @@ $email = 'teste@teste.com';
                     // TELE-ENTREGA PRÓPRIA
                     //document.location.assign("https://www.tele-tudo.com/pagtodireto");SUBSTITUÍ PELO DEBAIXO PARA MINHHA MAQUINA LOCAL
                     //document.location.assign("{!! action('OthersOptionsController@Aciona') !!}");
-                    document.location.assign("{!! route('cartao.index', ['user' => $User, 'IDPED' => $idPedido, 'valor' => $ValorTotal]) !!}");
+                    document.location.assign("{!! route('cartao.index', ['user' => $user, 'IDPED' => $idPedido, 'valor' => $ValorTotal]) !!}");
                     // document.location.assign("http://www.tele-tudo.com/resumo");
                 }
             }
