@@ -1,4 +1,4 @@
-<?php $idUser = 21; ?>
+<?php $idUser = 1; ?>
 
 
 @extends('layouts.padrao')

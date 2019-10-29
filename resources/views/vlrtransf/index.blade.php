@@ -10,12 +10,9 @@
         localStorage.setItem('SemMenu',1);
     }
 </script>
-
 @extends('layouts.padrao')
 <title>Informar transfer&ecirc;ncia de valor</title>
-
 @section('content')
-
 <script Language="JavaScript">
     document.write("<"+nH+">Informar transferência de valor</"+nH+">");
 
@@ -28,18 +25,15 @@
         document.getElementById("txidConta").value=itens[4];
     }
 </script>
-
 <br>
-
 <?php
 $idForn =Session::get('FORN');
-$Ban = $Nr = $Age = $Conta = '';
+$Ban = $Nr = $Age = $Conta = $idConta = '';
 $vValorTotal = Session::get('VLRTOTAL');
 $ValorTotal = number_format($vValorTotal, 2, ',', '.');
 $cCB = new App\ContasBancarias();
 $qryConta = $cCB->Contas($idForn);
-
-if ($qryConta==null) {
+if ($qryConta == null) {
     echo "<div class='alert alert-danger'>Vendedor n&atilde;o tem conta banc&aacute;ria cadastrada</div>";
     die;
 }
@@ -83,18 +77,19 @@ if ($qtd==1) {
     $tmAge = strlen($MaiorAge)*$cons;
     $tmConta = strlen($MaiorConta)*$cons;
 }
+$Teste=Session::get('Teste');
 ?>
 <strong><input name="txBanco" id="txBanco" type="text" value="{{$Ban}}" style="height: 22px; width: {{$tmBan}}px;" onclick="this.select()" readonly="readonly" >
     <input name="txnr" id="txnr" type="text" value="{{$Nr}}" style="height: 22px; width: {{$tmNr}}px;" onclick="this.select()" readonly="readonly" > , Agência
     <input name="txNrAg" id="txNrAg" type="text" value="{{$Age}}" style="height: 22px; width: {{$tmAge}}px;" onclick="this.select()" readonly="readonly" >, Conta
     <input name="txConta" id="txConta" type="text" value="{{$Conta}}" style="height: 22px; width: {{$tmConta}}px;" onclick="this.select()" readonly="readonly" ></strong>
 
-<form action="https://www.tele-tudo.com/vlrtransf" method="POST">
-
+<form action="https://tele-tudo.com/enviartransrf" method="post" >
+<input type="hidden" name="VLRTOTAL" value="{{$ValorTotal}}">
+<input type="hidden" name="Teste" value="{{$Teste}}">
+{{ csrf_field() }}
 <?php
 $IdPagar = Session::get('IDPED');
-$Teste=Session::get('Teste');
-
 $Bco="";
 $Age="";
 $Cta="";

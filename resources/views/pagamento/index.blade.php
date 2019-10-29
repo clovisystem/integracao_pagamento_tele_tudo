@@ -164,6 +164,7 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
 
 
         <form name="form-credito"  method="post" action="/checkout">
+        <!--<form name="form-credito"  method="post" action="/enviartransf">PARA ENVIAR A PAGINA DE LOCALIZACAO-->
             {!! Csrf_Field() !!}   
             {{ method_field('POST') }}
        

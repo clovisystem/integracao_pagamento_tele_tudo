@@ -86,6 +86,11 @@ class Sessao extends Model
     }*/
 
     public function tpEntrega($idPedido) {
+        /*$Cons = DB::table('entrega')
+            ->select('entrega.idEntregadora')
+            ->where('idPedido','=',$idPedido)
+            ->first();
+        return $Cons->idEntregadora;*/
         $Cons = DB::table('pedido')
             ->select('Tpe')
             ->where('idPed','=',$idPedido)
@@ -104,7 +109,7 @@ class Sessao extends Model
         $app_secret = "9559a449eece386b90344842e4514f39";
         $app_id = "395697367529746";
         $autoriz = "public_profile";
-        $redirect_uri = urlencode("https://www.tele-tudo.com/loginfb");
+        $redirect_uri = urlencode("https://tele-tudo.com/loginfb");
 
         $url = "http://www.facebook.com/dialog/oauth/?app_id=".$app_id.
             "&client_id=".$app_id.

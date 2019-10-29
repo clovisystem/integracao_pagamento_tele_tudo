@@ -10,11 +10,18 @@ $idUser = 0;
 <title>Tele-Tudo: Fornecedores</title>
 @section('content')
     <?php
-    if (Auth::check() == false) {
+    $iduser = 0;
+    /* if (Session::has('Nome')) {
+        $Nome = Session::get('Nome');
+    } */
+    if (Session::has('iduser')) {
+        $iduser = Session::get('iduser');
+        Auth::loginUsingId($iduser);
+    }
+    if ($iduser == 0) {
         echo "<div class='alert alert-danger'><font size='5'>Esta área é apenas para usuários registrados</font></div>";
     } else {
-        $iduser = 0;
-        $iduser = Auth::id();
+        $tpEntrega = -1;
         /* if ($iduser == 3) {
             $iduser = 28;
             Session::put('iduser', $iduser);
@@ -34,7 +41,6 @@ $idUser = 0;
             exit(0);
         }
         Session::put('SemChat', 1);
-        $tpEntrega = $tpEntrega;
         $PodeOnLine = 1;
         $Nome = $Nome;
         $qry = DB::table('conta')->select('Saldo', 'Pendente')->where('idPessoa', '=', $iduser)->get();
@@ -75,7 +81,12 @@ $idUser = 0;
             $TP = 2;
         }
         echo "<p><div class='alert alert-info'><size='" . $TG . "'>Fornecedor: " . $Nome . "</font><p></div>";
-        $qry = DB::table('empresa')->select('logradouro.adic')->join('endereco', 'endereco.ID', '=', 'empresa.idEndereco')->join('logradouro', 'logradouro.ID', '=', 'endereco.Logradouro_ID')->where('empresa.idEmpresa', '=', $idEmpresa)->first();
+        $qry = DB::table('empresa')
+            ->select('logra.adic')
+            ->join('endereco', 'endereco.ID', '=', 'empresa.idEndereco')
+            ->join('logra', 'logra.ID', '=', 'endereco.Logradouro_ID')
+            ->where('empresa.idEmpresa', '=', $idEmpresa)
+            ->first();
         if ($qry->adic == 0) {
             DB::update("update empresa set dtON = now(), TpAcesso = 0 where idEmpresa = " . $idEmpresa);
         } else {
@@ -133,7 +144,7 @@ $idUser = 0;
                 // Fornecedor: Visualizou
                 // $cForn1 = new App\Fornecedor();
                 $cForn->Visualizou($id, $idPed);
-                echo "<script>window.open('https://www.tele-tudo.com/public/pedido/" . $idPed . "', '_blank'); </script>";
+                echo "<script>window.open('https://tele-tudo.com/public/pedido/" . $idPed . "', '_blank'); </script>";
                 break;
         }
     }
@@ -142,7 +153,7 @@ $idUser = 0;
     $sql.= "Where ID = 1 ";
     $ConsA = DB::select(DB::raw($sql));
     if ($ConsA[0]->Som == 1) {
-        $som = "https://www.tele-tudo.com/mapa/Voz.mp3";
+        $som = "https://tele-tudo.com/mapa/Voz.mp3";
     } else {
         $som = "";
     }
@@ -150,7 +161,7 @@ $idUser = 0;
     if ($tpEntrega < 2) {
     ?>
     <form name="Form1"
-          action="https://www.tele-tudo.com/fornecedor"
+          action="https://tele-tudo.com/fornecedor"
           method="get" target="_self">
         <br>
         <table class="table table-striped table-bordered">
@@ -234,7 +245,7 @@ $idUser = 0;
                 } else {
                 ?>
                 <form name="Form2"
-                      action="https://www.tele-tudo.com/fornecedor"
+                      action="https://tele-tudo.com/fornecedor"
                       method="get" target="_self">
                     <br>
                     <table class="table table-striped table-bordered">
@@ -303,7 +314,7 @@ $idUser = 0;
                 $sValor = $RegUltCompra->Valor;
                 ?>
                 <br>
-                <form action="https://www.tele-tudo.com/pedido/{{$idUltPedDia}}" name="Form3" target="_blank" >
+                <form action="https://tele-tudo.com/pedido/{{$idUltPedDia}}" name="Form3" target="_blank" >
                     Dados da última venda:
                     <br>
                     <table class="table table-striped table-bordered">
@@ -357,32 +368,33 @@ $idUser = 0;
 
                         function ClicVisualizei(id, idPed) {
                             // alert('aqui');
-                            document.location.assign("https://www.tele-tudo.com/public/fornecedor?op=1&id=" + id + "&idPed=" + idPed);
+                            document.location.assign("https://tele-tudo.com/public/fornecedor?op=1&id=" + id + "&idPed=" + idPed);
                         }
 
                         function ClicConfirmei(id, idPed, idTrans) {
-                            document.location.assign("https://www.tele-tudo.com/public/fornecedor?op=2&id=" + id + "&idPed=" + idPed + "&idTrans=" + idTrans);
+                            document.location.assign("https://tele-tudo.com/public/fornecedor?op=2&id=" + id + "&idPed=" + idPed + "&idTrans=" + idTrans);
                         }
 
                         function VerVenda(id, idPed) {
                             // alert('x');
-                            document.location.assign("https://www.tele-tudo.com/public/fornecedor?op=3&id=" + id + "&idPed=" + idPed);
+                            document.location.assign("https://tele-tudo.com/public/fornecedor?op=3&id=" + id + "&idPed=" + idPed);
                         }
 
                         function recarrega() {
-                            document.location.assign("https://www.tele-tudo.com/public/fornecedor");
+                            document.location.assign("https://tele-tudo.com/fornecedor");
+                            // document.location.assign("https://tele-tudo.com/public/fornecedor");
                         }
 
                         function produtos() {
-                            window.open('https://www.tele-tudo.com/public/Cadastro', '_blank');
+                            window.open('https://tele-tudo.com/public/Cadastro', '_blank');
                         }
 
                         function compras() {
-                            window.open('https://www.tele-tudo.com', '_blank');
+                            window.open('https://tele-tudo.com', '_blank');
                         }
 
                         function contasbancarias() {
-                            window.open('https://www.tele-tudo.com/public/contasbancarias', '_blank');
+                            window.open('https://tele-tudo.com/public/contasbancarias', '_blank');
                         }
 
                         function rede() {
@@ -390,7 +402,7 @@ $idUser = 0;
                         }
 
                         function entregas() {
-                            window.open('https://www.tele-tudo.com/confgentrega', '_blank');
+                            window.open('https://tele-tudo.com/confgentrega', '_blank');
                         }
 
                         function minhapag() {
@@ -403,11 +415,11 @@ $idUser = 0;
                         }
 
                         function edtminhapag() {
-                            window.open('https://www.tele-tudo.com/editapagina', '_blank');
+                            window.open('https://tele-tudo.com/editapagina', '_blank');
                         }
 
                         function minhaLoja() {
-                            window.open('https://www.tele-tudo.com/fornecedor/create', '_blank');
+                            window.open('https://tele-tudo.com/fornecedor/create', '_blank');
                         }
 
                     </script>

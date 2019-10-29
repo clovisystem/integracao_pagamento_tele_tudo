@@ -94,7 +94,7 @@ $atu=0;
 if ($atu>0) {
 	?>
 	<script language="javascript" type="text/javascript">
-	document.location.assign("https://www.tele-tudo.com/public/adm");
+	document.location.assign("https://tele-tudo.com/public/adm");
 	</script>
 	<?php
 }
@@ -144,24 +144,24 @@ if ($atu>0) {
     ?>
     <script>
         function recarrega() {
-            document.location.assign("https://www.tele-tudo.com/public/adm");
+            document.location.assign("https://tele-tudo.com/public/adm");
         }
 
         function SetaModo(modo) {
-            document.location.assign("https://www.tele-tudo.com/public/adm?op=3&id="+modo);
+            document.location.assign("https://tele-tudo.com/public/adm?op=3&id="+modo);
         }
 
         function buscar() {
             var busca = document.getElementById('buscageral').value;
-            document.location.assign("https://www.tele-tudo.com/public/adm?op=4&id="+busca+"&dias=1");
+            document.location.assign("https://tele-tudo.com/public/adm?op=4&id="+busca+"&dias=1");
         }
 
         function HabEnder(id) {
-            document.location.assign("https://www.tele-tudo.com/public/adm?op=7&id="+id);
+            document.location.assign("https://tele-tudo.com/public/adm?op=7&id="+id);
         }
 
         function Coringa() {
-            document.location.assign("https://www.tele-tudo.com/public/adm?op=8&id=0");
+            document.location.assign("https://tele-tudo.com/public/adm?op=8&id=0");
         }
 
     </script>
@@ -288,7 +288,7 @@ if ($atu>0) {
     <?php
     if ($coringas==1) {
     ?>
-    <form name="formulario" action="https://www.tele-tudo.com/public/adm" method="get">
+    <form name="formulario" action="https://tele-tudo.com/public/adm" method="get">
         <input name="op" type="hidden" value="9">
         <?php
         $cAdm->MontaCbCoringas();

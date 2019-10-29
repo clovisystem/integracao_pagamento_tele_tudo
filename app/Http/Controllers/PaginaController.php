@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-/* use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Pedido; */
+
 use App\Empresa;
 use Illuminate\Support\Facades\Redirect;
 
@@ -12,7 +10,7 @@ class PaginaController extends Controller {
     public function Aciona($site) {
         $forn = Empresa::where("site",$site)->first();
         if ($forn==null) {
-            $sitete = "https://www.tele-tudo.com/".$site;
+            $sitete = "https://tele-tudo.com/".$site;
             $forn = Empresa::where("site",$sitete)->first();
         }
         if ($forn==null) {

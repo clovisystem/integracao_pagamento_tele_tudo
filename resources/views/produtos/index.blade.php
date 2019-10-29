@@ -30,7 +30,7 @@
             $CliSemEnder = 1;
         }
         $CepDoCli=$pessoas->Cep;
-        $cCli = new App\Clientes();
+        $cCli = new App\Clientes;
         $EnderOK = $cCli->EnderOK($idUser);
 
     }
@@ -40,10 +40,12 @@
     }
     ?>
 </title>
+
 @section('content')
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
     <script>
+
         var txtenviar="";
         var VlrPedAnt = 0;
         var PedAnt="";
@@ -163,7 +165,7 @@
         }
 
         function Logar() {
-            document.location.assign("http://www.tele-tudo.com/login");
+            document.location.assign("http://tele-tudo.com/login");
         }
 
         function aciona() {
@@ -186,11 +188,11 @@
             var posId =Procura(ID);
             if (posId>-1) {
                 document.getElementById(nmObjQT).value = 0;
-                document.getElementById(nmObjIM).src="https://www.tele-tudo.com/resources/assets/img/carrinho.png";
+                document.getElementById(nmObjIM).src="https://tele-tudo.com/resources/assets/img/carrinho.png";
                 TiraElem(ID);
             } else {
                 Adiciona(nrLin, ID, 1);
-                document.getElementById(nmObjIM).src="https://www.tele-tudo.com/resources/assets/img/retirar-do-carrinho.jpg";
+                document.getElementById(nmObjIM).src="https://tele-tudo.com/resources/assets/img/retirar-do-carrinho.jpg";
                 document.getElementById(nmObjQT).value = 1;
             }
             Totaliza();
@@ -226,7 +228,7 @@
             var Valor = Number.parseFloat(sValor2);
             var vTpe = document.getElementById(ObjTpe).value;
             ArrIts.push({pos:ArrIts.length, cod:ID, qua:quant, vlr:Valor , Tpe:vTpe});
-            document.getElementById('Carrinho').src="https://www.tele-tudo.com/resources/assets/img/carrinhopeqOK.png";
+            document.getElementById('Carrinho').src="https://tele-tudo.com/resources/assets/img/carrinhopeqOK.png";
         }
 
         function Totaliza() {
@@ -265,7 +267,7 @@
             }
             ArrIts = newArr;
             if (newArr.length==0) {
-                document.getElementById('Carrinho').src="https://www.tele-tudo.com/resources/assets/img/carrinhopeq.png";
+                document.getElementById('Carrinho').src="https://tele-tudo.com/resources/assets/img/carrinhopeq.png";
             }
         }
 
@@ -283,28 +285,26 @@
     Session::put('url', $_SERVER ['REQUEST_URI']);
     $Teste = 0;
     $logado=0;
-    if (Auth::check()) {
+
+    if (Session::has('Nome')) {
         $Nome = Session::get('Nome');
-        if ($Nome=="") {
-            // if (Auth::check()) {
+        if ($Nome>"") {
+            $logado = 1;
+            if (Session::get('iduser')==21) {
+                $Teste = 1;
+            }
+            if (Session::get('iduser')==1) {
+                // MUDAR PARA PEGAR O ADM PELO PERFIL
+                // $mostrar=true;
+                $adm=true;
+            }
+        } else {
             Session::forget('Nome');
             Session::forget('iduser');
             Session::forget('Debug');
             $cookie = Cookie::forget('Nome');
             $cookie = Cookie::forget('iduser');
             Auth::logout();
-            // }
-        } else {
-            $logado=1;
-            if (Session::get('iduser')==21) {
-                $Teste = 1;
-            }
-
-            if (Session::get('iduser')==1) {
-                // MUDAR PARA PEGAR O ADM PELO PERFIL
-                // $mostrar=true;
-                $adm=true;
-            }
         }
     }
     if ($Teste==1) {
@@ -412,8 +412,25 @@
         $Tpe = $cProd->GetTpe();
         $qtItens=$cProd->Qtd();
     }
+
+    if (isset($_REQUEST['erro'])) {
+        echo "<div class='alert alert-info'><h3>Senha Inválida</h3></div>";
+    }
+    if (isset($_REQUEST['s'])) {
+        if (Session::Has('forn')) {
+            DB::update("update empresa set dtON = null where idEmpresa = ".Session::get('forn'));
+        }
+        Session::forget('Nome');
+        Session::forget('iduser');
+        Session::forget('Debug');
+        Session::forget('PEDIDO');
+        $cookie = Cookie::forget('Nome');
+        $cookie = Cookie::forget('iduser');
+        Auth::logout();
+    }
+
     ?>
-    <form name="formPesq" action="https://www.tele-tudo.com/produtos" method="get">
+    <form name="formPesq" action="https://tele-tudo.com/produtos" method="get">
         <input name='CatProd' id='CatProd' type='text' hidden='hidden' value='' />
         {{--<div class='alert alert-info'>Site em modo de teste</div>--}}
         </p>
@@ -427,32 +444,29 @@
 
             ?>
 
-           
-
-            
-
             @if ($qtItens==0)
                 <table align="center" border="0" width="400" cellspacing="0" cellpadding="0">
-                    <thead>
-                    <tr>
+		        <thead>
+                    	<tr>
                         <td>
                         <span style="opacity:0.0;">
                       
                         
                             <!--{{ $password = Request::input('password') }}-->
-                        {{ $User = isset($_POST['User'])?$_POST['User']:null }}    
+                        	{{ $User = isset($_POST['User'])?$_POST['User']:null }}    
                         </span>
-                        @if($User != '')
-                            <label for="">Parabéns, {{ $User }} pela compra de {{ $Descricao }} no valor de {{ $Valor }}, continue comprando com a gente!</label>
-                        @else
-                            {{ '' }}
-                        @endif
+                        	@if($User != '')
+                            		<label for="">Parabéns, {{ $User }} pela compra de {{ $Descricao }} no valor de {{ $Valor }}, continue comprando com a gente!</label>
+                        	@else
+                            		{{ '' }}
+                        	@endif
                         </td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>
+
                             <img border="0" src="{{asset('resources/assets/img/indexcep.png')}}" width="400" height="60"></td>
                     </tr>
                     <tr>
@@ -476,9 +490,6 @@
                                 <img border="0" src="{{asset('resources/assets/img/indexdesc.png')}}" width="400" height="60"></p>
                         </td>
                     </tr>
-
-
-
                     <tr>
                         <td background="{{asset('resources/assets/img/fundo%20menu.png')}}">
                             <p align="center">&nbsp;
@@ -591,10 +602,6 @@
         </div>
     @endif
     <?php
-    if (Session::has('message')) {
-        echo "<div class='alert alert-info'><h3>".Session::get('message')."</h3></div>";
-        Session::forget('message');
-    }
     $urlredir='';
     if ($qtItens==0) {
         if ($pesq>"") {
@@ -651,16 +658,16 @@
                 txtenviar+="&c="+CEP;
 
                 if (idrede>0) {
-                    document.location.assign('http://www.tele-tudo.com/criapedido?'+txtenviar);
+                    document.location.assign('http://tele-tudo.com/criapedido?'+txtenviar);
                 } else {
                     if (Logado>0) {
                         if (CliSemEnder>0) {
-                            document.location.assign('http://www.tele-tudo.com/entrega/ender');
+                            document.location.assign('http://tele-tudo.com/entrega/ender');
                         } else {
-                            document.location.assign('http://www.tele-tudo.com/entrega?'+txtenviar);
+                            document.location.assign('http://tele-tudo.com/entrega?'+txtenviar);
                         }
                     } else {
-                        document.location.assign('http://www.tele-tudo.com/criapedido?'+txtenviar);
+                        document.location.assign('http://tele-tudo.com/criapedido?'+txtenviar);
                     }
                 }
             }

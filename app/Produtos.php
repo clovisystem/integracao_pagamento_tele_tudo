@@ -138,8 +138,8 @@ class Produtos extends Model
 
             // CONSULTA O CEP NA BASE DE DADOS
             $ConsCep = DB::table('cep')
-                ->select('idBairro','idCidade')
-                ->where('NrCep','=',$cep_tmp)
+                ->select('bairro_id as idBairro','cidade_id as idCidade')
+                ->where('cep','=',$cep_tmp)
                 ->first();
             if ($ConsCep==null) {
                 $ClsCep = new Cep;
@@ -169,9 +169,9 @@ class Produtos extends Model
             // DEDUZ A CIDADE
             $idCid = 0;
             if ($bairro > 0) {
-                $ConsBai = DB::table('bairro')
-                    ->select('idcidade')
-                    ->where('id','=',$bairro)
+                $ConsBai = DB::table('cep_bairro')
+                    ->select('cidade_id as idcidade')
+                    ->where('id_bairro','=',$bairro)
                     ->first();
                 $idCid = $ConsBai->idcidade;
             } else {
@@ -182,9 +182,9 @@ class Produtos extends Model
                 }
             }
             if ($idCid>0) {
-                $ConsCid = DB::table('cidade')
-                    ->select('NomeCidade')
-                    ->where('ID','=',$idCid)
+                $ConsCid = DB::table('cep_cidade')
+                    ->select('cidade as NomeCidade')
+                    ->where('id_cidade','=',$idCid)
                     ->first();
                 $this->Cid = $ConsCid->NomeCidade;
             }
@@ -212,8 +212,8 @@ class Produtos extends Model
 
     public function VeSeTemCidDoCliente($cep, $idCid) {
         $Cons = DB::table('cep')
-            ->select('cep.lat','cep.lon','cep.idCidade','cep.idBairro')
-            ->where('NrCep','=',$cep)
+            ->select('latitude as lat','longitude as lon','cidade_id as idCidade','bairro_id as idBairro')
+            ->where('cep','=',$cep)
             ->first();
         $bairro = $Cons->idBairro;
         $lat = $Cons->lat;
@@ -292,7 +292,7 @@ class Produtos extends Model
                     $Total1=$result->Valor;
                 }
                 if ($result->Imagem == null) {
-                    $Imagem = "https://www.tele-tudo.com/mapa/Caixa.png";
+                    $Imagem = "https://tele-tudo.com/mapa/Caixa.png";
                 } else {
                     $Imagem = $result->Imagem;
                 }
@@ -361,10 +361,10 @@ class Produtos extends Model
         }
         foreach ($ConsCat as $Catego) {
             if  ($Catego->ID>1) {
-                $ret.="<img border='0' src='https://www.tele-tudo.com/resources/assets/img/".$Catego->ImgCad."' style='cursor:hand; width:100px; height:100px;' onclick='ClicCat(".$Catego->ID.")'>";
+                $ret.="<img border='0' src='https://tele-tudo.com/resources/assets/img/".$Catego->ImgCad."' style='cursor:hand; width:100px; height:100px;' onclick='ClicCat(".$Catego->ID.")'>";
             }
         }
-        return "<img border='0' src='https://www.tele-tudo.com/resources/assets/img/Informatica2.png' style='cursor:hand; width:100px; height:100px;' onclick='ClicCat(2)'>";
+        return "<img border='0' src='https://tele-tudo.com/resources/assets/img/Informatica2.png' style='cursor:hand; width:100px; height:100px;' onclick='ClicCat(2)'>";
     }
 
     public function GetTpe() {
@@ -424,7 +424,7 @@ class Produtos extends Model
 
         if ($result->tpEntrega<3) {
             if ($result->OnAgora == 1 ) {
-                $this->Resultado.="<img src='https://www.tele-tudo.com/img/ComTeleV.png' style='position: absolute; z-index: 0;' style=width='121' height='105' >";
+                $this->Resultado.="<img src='https://tele-tudo.com/img/ComTeleV.png' style='position: absolute; z-index: 0;' style=width='121' height='105' >";
             }
         }
 
@@ -439,7 +439,7 @@ class Produtos extends Model
         $Tpe = 3;
         if ($result->tpEntrega<3) {
             if ($result->OnAgora == 1 ) {
-                $this->Resultado.="<img src='https://www.tele-tudo.com/resources/assets/img/ComTeleV.png' style='position: absolute; z-index: 0; cursor:hand' style=width='121' height='105' onclick=Marca('".$nrLin."') >";
+                $this->Resultado.="<img src='https://tele-tudo.com/resources/assets/img/ComTeleV.png' style='position: absolute; z-index: 0; cursor:hand' style=width='121' height='105' onclick=Marca('".$nrLin."') >";
                 $Tpe = $result->tpEntrega;
             }
         }
@@ -455,11 +455,8 @@ class Produtos extends Model
         $this->Resultado.="<input type='number' style='text-align: center;' class='form-control' id='txQt".$nrLin."' value='".$QtdIn."' size='20' onkeyup=AtuQuant('".$nrLin."') onchange=AtuQuant('".$nrLin."') ></td>";
         $this->Resultado.="</tr><tr>";
         $this->Resultado.="<td align='center' ><br>";
-        $this->Resultado.="<img border='0' src='https://www.tele-tudo.com/resources/assets/img/".$imgCarr."' style='width=200px; height=63px; cursor:hand' onclick=Marca('".$nrLin."') id='txIm".$nrLin."' ></td>";
+        $this->Resultado.="<img border='0' src='https://tele-tudo.com/resources/assets/img/".$imgCarr."' style='width=200px; height=63px; cursor:hand' onclick=Marca('".$nrLin."') id='txIm".$nrLin."' ></td>";
         $this->Resultado.="</tr><tr>";
-
-        /* $this->Resultado.="<td align='center'>";
-        $this->Resultado.="<img border='0' src='http://www.tele-tudo.com/img/rodapeprod.png' width='200' height='10'></td>"; */
 
         $this->Resultado.="</tr></tbody></table></td>";
         $this->Resultado.="<input id='txID".$nrLin."' name='txID".$nrLin."' type='hidden' value='".$result->ID."'>";
@@ -484,107 +481,110 @@ class Produtos extends Model
             ->where('ID','=',1)
             ->first();
         $this->debug=$ConsConfig->Debug;
-
-        foreach ($ConsLojas as $Lojas) {
-            $ok=0;
-            $this->LojasNaCidade++;
-            $TeUtilizado = -1;
-            if ($Teste==1) {
-                $ok=1;
-            } else {
-
-                // $date1 = date('Y-m-d H:i:s');
-                $date1 = date('Y-m-d H:i:s',strtotime("-1 hours", strtotime(date('Y-m-d H:i:s'))));
-
-                $Tempo=$this->time_diff($date1,$Lojas->dtON);
-                $this->loga('<Br>idCid = '.$idCid);
-                $this->loga('idEmpresa = '.$Lojas->idEmpresa);
-                $this->loga('date1 = '.$date1);
-                $this->loga('Lojas->dtON = '.$Lojas->dtON);
-                $this->loga('tempo='.$Tempo);
-                $ok1=false;
-                if ($tipo==1) {
-                    // PROCURA CIDADE DO CLIENTE QUE SE CADASTROU
-                    $ok1=true;
+        if ($ConsLojas == null) {
+            // echo 'Pegou o Nulo2'; die;
+        } else {
+            foreach ($ConsLojas as $Lojas) {
+                $ok=0;
+                $this->LojasNaCidade++;
+                $TeUtilizado = -1;
+                if ($Teste==1) {
+                    $ok=1;
                 } else {
-                    // VE SE TEM A LOJA ABERTA PRA COMPRAR
 
-                    // Se der errado, aumentar o tempo
-                    if ($Tempo<3800) {
-                        // if ($Tempo<97) {
-                        // if ($Tempo<97) {
+                    // $date1 = date('Y-m-d H:i:s');
+                    $date1 = date('Y-m-d H:i:s',strtotime("-1 hours", strtotime(date('Y-m-d H:i:s'))));
+
+                    $Tempo=$this->time_diff($date1,$Lojas->dtON);
+                    $this->loga('<Br>idCid = '.$idCid);
+                    $this->loga('idEmpresa = '.$Lojas->idEmpresa);
+                    $this->loga('date1 = '.$date1);
+                    $this->loga('Lojas->dtON = '.$Lojas->dtON);
+                    $this->loga('tempo='.$Tempo);
+                    $ok1=false;
+                    if ($tipo==1) {
+                        // PROCURA CIDADE DO CLIENTE QUE SE CADASTROU
                         $ok1=true;
-                    }
-                }
-                if ($ok1==true) {
-                    $ok=0;
+                    } else {
+                        // VE SE TEM A LOJA ABERTA PRA COMPRAR
 
-                    $this->loga( 'tempo = '.$Tempo);
-                    $this->loga( 'tpEntrega='.$Lojas->tpEntrega);
-
-                    switch ($Lojas->tpEntrega) {
-                        case 0:
-                            // PLAYDELIVERY
-                            if ($Lojas->distancia<$DistMax) {
-                                $ok=1;
-                                $TeUtilizado=0;
-                            }
-                            $this->loga( 'PLAYDELIVERY');
-                            $this->loga( 'Lojas->distancia = '.$Lojas->distancia);
-                            $this->loga( 'DistMax='.$DistMax);
-                            $this->loga( 'ok='.$ok);
-                            break;
-                        case 1:
-                            // ENTREGA PRÓPRIA POR DISTÂNCIA
-                            $this->loga( 'ENTREGA PRÓPRIA POR DISTÂNCIA');
-                            $this->loga( 'Lojas->distancia = '.$Lojas->distancia);
-                            $this->loga( 'DistMax='.$DistMax);
-                            if ($Lojas->distancia < $Lojas->DistMax) {
-                                // echo 'ok = 1<Br>';
-                                $ok=1;
-                                $TeUtilizado=1;
-                            }
-                            break;
-                        case 2:
-                            // POR BAIRRO
-                            $qtd = DB::table('TpEntregaEmpresa')
-                                ->select(DB::raw('count(*) as Quant'))
-                                ->where('idEmpresa', '=', $Lojas->idEmpresa)
-                                ->where('idBairro', '=', $bairro)
-                                ->first();
-                            if ($qtd->Quant>0) {
-                                $ok=1;
-                                $TeUtilizado=2;
-                            }
-                            $this->loga('POR BAIRRO');
-                            break;
-
-                    }
-
-                    // PREVISÃO PARA ENTREGA INTEGRADA ONDE A PRÓPRIA NÃO ENTREGA
-                    $this->loga('ok = '.$ok);
-                    if ($ok==0) {
-                        $this->loga('Lojas->idEntrega = '.$Lojas->idEntrega);
-                        if ($Lojas->idEntrega==2) {
-                            $this->loga($Lojas->distancia.'<'.$DistMax);
-                            if ($Lojas->distancia<$DistMax) {
-                                $ok=1;
-                                $this->loga('ok=1');
-                                $TeUtilizado=0;
-                            }
+                        // Se der errado, aumentar o tempo
+                        if ($Tempo<3800) {
+                            // if ($Tempo<97) {
+                            // if ($Tempo<97) {
+                            $ok1=true;
                         }
                     }
-                } else {
-                    break;
+                    if ($ok1==true) {
+                        $ok=0;
+
+                        $this->loga( 'tempo = '.$Tempo);
+                        $this->loga( 'tpEntrega='.$Lojas->tpEntrega);
+
+                        switch ($Lojas->tpEntrega) {
+                            case 0:
+                                // PLAYDELIVERY
+                                if ($Lojas->distancia<$DistMax) {
+                                    $ok=1;
+                                    $TeUtilizado=0;
+                                }
+                                $this->loga( 'PLAYDELIVERY');
+                                $this->loga( 'Lojas->distancia = '.$Lojas->distancia);
+                                $this->loga( 'DistMax='.$DistMax);
+                                $this->loga( 'ok='.$ok);
+                                break;
+                            case 1:
+                                // ENTREGA PRÓPRIA POR DISTÂNCIA
+                                $this->loga( 'ENTREGA PRÓPRIA POR DISTÂNCIA');
+                                $this->loga( 'Lojas->distancia = '.$Lojas->distancia);
+                                $this->loga( 'DistMax='.$DistMax);
+                                if ($Lojas->distancia < $Lojas->DistMax) {
+                                    // echo 'ok = 1<Br>';
+                                    $ok=1;
+                                    $TeUtilizado=1;
+                                }
+                                break;
+                            case 2:
+                                // POR BAIRRO
+                                $qtd = DB::table('TpEntregaEmpresa')
+                                    ->select(DB::raw('count(*) as Quant'))
+                                    ->where('idEmpresa', '=', $Lojas->idEmpresa)
+                                    ->where('idBairro', '=', $bairro)
+                                    ->first();
+                                if ($qtd->Quant>0) {
+                                    $ok=1;
+                                    $TeUtilizado=2;
+                                }
+                                $this->loga('POR BAIRRO');
+                                break;
+
+                        }
+
+                        // PREVISÃO PARA ENTREGA INTEGRADA ONDE A PRÓPRIA NÃO ENTREGA
+                        $this->loga('ok = '.$ok);
+                        if ($ok==0) {
+                            $this->loga('Lojas->idEntrega = '.$Lojas->idEntrega);
+                            if ($Lojas->idEntrega==2) {
+                                $this->loga($Lojas->distancia.'<'.$DistMax);
+                                if ($Lojas->distancia<$DistMax) {
+                                    $ok=1;
+                                    $this->loga('ok=1');
+                                    $TeUtilizado=0;
+                                }
+                            }
+                        }
+                    } else {
+                        break;
+                    }
                 }
-            }
-            if ($ok==1) {
-                $lstLojasCOM .= $Lojas->idEmpresa.',';
-                $this->loga('lstLojas = '.$lstLojas);
-                $this->loga('Lojas->idEmpresa = '.$Lojas->idEmpresa);
-                $this->loga('TeUtilizado = '.$TeUtilizado);
-                array_push($this->TiposEmpr,$Lojas->idEmpresa);
-                array_push($this->TiposTps,$TeUtilizado);
+                if ($ok==1) {
+                    $lstLojasCOM .= $Lojas->idEmpresa.',';
+                    $this->loga('lstLojas = '.$lstLojas);
+                    $this->loga('Lojas->idEmpresa = '.$Lojas->idEmpresa);
+                    $this->loga('TeUtilizado = '.$TeUtilizado);
+                    array_push($this->TiposEmpr,$Lojas->idEmpresa);
+                    array_push($this->TiposTps,$TeUtilizado);
+                }
             }
         }
 

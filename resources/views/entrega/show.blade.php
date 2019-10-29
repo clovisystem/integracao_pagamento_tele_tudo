@@ -9,11 +9,15 @@
     </style>
 
     <?php
-    $clsEntrega = new Entrega();
-    $idPedido = $clsEntrega->getPedido();
+    $clsEntrega = new App\Entrega();
+
+    $idPedido = $entr->idPedido;
+    // $idPedido = $clsEntrega->getPedido();
+
     $EsperaPagamento=1;
     $Modo=$clsEntrega->getModo();
     $Teste=0;
+  
     if (Session::has('Teste')) {
         $Teste=1;
     }
@@ -348,6 +352,7 @@
 <div id="map" name="map"></div>
 <?php
 $iduser=0;
+
 if (Session::has('iduser')) {
     $iduser=Session::get('iduser');
 } else {

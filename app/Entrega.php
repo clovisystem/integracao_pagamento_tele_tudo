@@ -5,9 +5,10 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Entrega extends Model
-{
+class Entrega extends Model {
+
     protected $table = 'entrega';
+
     private $idEntrega=0;
     private $VlrEntrega=0;
     private $VlrCompras=0;
@@ -489,8 +490,8 @@ class Entrega extends Model
     public function CoordCliente($iduser) {
         $qry = DB::table('users')
             ->join('endereco', 'endereco.ID', '=', 'users.Endereco_ID')
-            ->join('cep', 'cep.id', '=', 'endereco.idCep')
-            ->select('cep.lat','cep.lon')
+            ->join('cep', 'cep.cep', '=', 'endereco.CEP')
+            ->select('cep.latitude as lat','cep.longitude as lon')
             ->where('users.id', '=', $iduser)
             ->first();
         return $qry->lat."|".$qry->lon;
@@ -499,12 +500,11 @@ class Entrega extends Model
     public function Coord_Fornecedor($idForn) {
         $qry = DB::table('empresa')
             ->join('endereco', 'endereco.ID', '=', 'empresa.idEndereco')
-            ->join('cep', 'cep.id', '=', 'endereco.idCep')
-            ->select('cep.lat','cep.lon')
+            ->join('cep', 'cep.cep', '=', 'endereco.CEP')
+            ->select('cep.latidude as lat','cep.longitude as lon')
             ->where('empresa.idEmpresa', '=', $idForn)
             ->first();
         return $qry->lat."|".$qry->lon;
-
     }
 
     public function CoordFornecedor() {
@@ -513,8 +513,8 @@ class Entrega extends Model
             ->join('produtos', 'produtos.ID', '=', 'pedidoItens.idprod')
             ->join('empresa', 'empresa.idEmpresa', '=', 'produtos.Empresax_ID')
             ->join('endereco', 'endereco.ID', '=', 'empresa.idEndereco')
-            ->join('cep', 'cep.id', '=', 'endereco.idCep')
-            ->select('cep.lat','cep.lon')
+            ->join('cep', 'cep.cep', '=', 'endereco.CEP')
+            ->select('cep.latitude as lat','cep.longitude as lon')
             ->first();
         return $qry->lat."|".$qry->lon;
     }

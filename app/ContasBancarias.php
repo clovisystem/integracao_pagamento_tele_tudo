@@ -25,3 +25,4 @@ class ContasBancarias extends Model
     }
 
 }
+

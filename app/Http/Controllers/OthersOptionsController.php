@@ -151,7 +151,12 @@ class OthersOptionsController extends Controller
                                 
             //return view('produtos.index', ['id' => $setID,'id_transacao' => $Ped, 'Valor' => $Valor,'Descricao' => $Descricao, 'User' => $User]);
           
-            return view('produtos.index')->with(compact('setID','Ped','Valor','Descricao','User'));
+            //return view('produtos.index')->with(compact('setID','Ped','Valor','Descricao','User'));
+   
+            //return view('vlrtransf.index')->with(compact('setID','Ped','Valor','Descricao','User'));
+        
+            return redirect()->route('enviartransrfOthers', [$setID,$Ped,$Valor,$Descricao,$User]); 
+
         }
         else{
             /*return '<link rel="stylesheet" href="css/app.css">

@@ -113,7 +113,7 @@ if ($Fazer==true) {
         ?>
         <div class="alert alert-info">{{ 'Usuario Logado: '.$Nome }}</div>
         <script language="javascript" type="text/javascript">
-            document.location.assign("https://www.tele-tudo.com/confirma?IDPED="+{{$idPedido}});
+            document.location.assign("https://tele-tudo.com/confirma?IDPED="+{{$idPedido}});
 
         </script>
         <?php
@@ -127,6 +127,7 @@ if ($Fazer==true) {
     }
 
 } else {
+echo '131'; die;
     echo 'Não foi possível realizar login na PlayDelivery<p>';
 }
 ?>
