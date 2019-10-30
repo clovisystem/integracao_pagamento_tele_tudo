@@ -8,6 +8,7 @@
 <script type="text/javascript" src="{{ URL::asset('js/jquery/jquery-1.6.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js') }}"></script>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+
 <link rel="stylesheet" href="../../css/pagamento.css">
 
 
@@ -59,8 +60,8 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
 </head>
 <body>
 <div class="payment-title">
-        <h1>Payment Information</h1>
-    </div>
+    <h1>Payment Information</h1>
+</div>
     <div class="container preload">
         <div class="creditcard">
             <div class="front">
@@ -78,7 +79,7 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
                             <path class="darkcolor greydark" d="M750,431V193.2c-217.6-57.5-556.4-13.5-750,24.9V431c0,22.1,17.9,40,40,40h670C732.1,471,750,453.1,750,431z" />
                         </g>
                         <text transform="matrix(1 0 0 1 60.106 295.0121)" id="svgnumber" class="st2 st3 st4">0123 4567 8910 1112</text>
-                        <text transform="matrix(1 0 0 1 54.1064 428.1723)" id="svgname" class="st2 st5 st6">{{ $Nome }}</text>
+                        <text transform="matrix(1 0 0 1 54.1064 428.1723)" id="svgname" class="st2 st5 st6">{{ $nome }}</text>
                         <text transform="matrix(1 0 0 1 54.1074 389.8793)" class="st7 st5 st8">cardholder name</text>
                         <text transform="matrix(1 0 0 1 479.7754 388.8793)" class="st7 st5 st8">expiration</text>
                         <text transform="matrix(1 0 0 1 65.1054 241.5)" class="st7 st5 st8">card number</text>
@@ -153,7 +154,7 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
                         </g>
                         <rect x="58.1" y="378.6" class="st11" width="375.5" height="13.5" />
                         <rect x="58.1" y="405.6" class="st11" width="421.7" height="13.5" />
-                        <text transform="matrix(1 0 0 1 59.5073 228.6099)" id="svgnameback" class="st12 st13">{{ $Nome }}</text>
+                        <text transform="matrix(1 0 0 1 59.5073 228.6099)" id="svgnameback" class="st12 st13">{{ $nome }}</text>
                     </g>
                 </svg>
             </div>
@@ -167,60 +168,56 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
         <!--<form name="form-credito"  method="post" action="/enviartransf">PARA ENVIAR A PAGINA DE LOCALIZACAO-->
             {!! Csrf_Field() !!}   
             {{ method_field('POST') }}
-       
-
-        
-    
-                        <div class="form-group">
+                <div class="form-group">
                 <div id="form-agrupado">
                     <div class="field-container">
                         <label for="name">Nome</label>
-                        <input name="name" id="name" class="form-control" maxlength="80" type="text" value="{{ $Nome }}" required>
+                        <input name="name" id="name" class="form-control" maxlength="80" type="text" value="{{ $nome }}" required>
                         <label for="aviso" class="btn btn-warning">Verifique se o nome está igual ao do cartão de crédito</label>
                         <!--<input name="id" class="form-control" maxlength="80" type="hidden" value="{{ $id }}">-->
                         <input name="IDPED" class="form-control" maxlength="80" type="hidden" value="{{ $IDPED }}">
                         <!--<input name="valor" class="form-control" maxlength="80" type="hidden" value="{{ $valor }}">-->
-                        @if($valor >= 1000.00)
-                        <select name="valor" id="valor" class-"form-control">
-                            <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
-                            <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
+     
+                        @if($valorTotal >= 1000.00)
+                        <select name="valorTotal" id="valorTotal" class="browser-default custom-select">
+                            <option value="{{ $valorTotal }}">1x de R$ {{ $valorTotal }}</option>
+                            <?php $valor2 = number_format($valorTotal / 2, 2,'.',','); ?>
                             <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
-                            <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
+                            <?php $valor3 = number_format($valorTotal / 3, 2,'.',','); ?>
                             <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
-                            <?php $valor4 = number_format($valor / 4, 2,'.',','); ?>
+                            <?php $valor4 = number_format($valorTotal / 4, 2,'.',','); ?>
                             <option value="{{ $valor4 * 4 }}">4x de R$ {{ $valor4 }}</option>
-                            <?php $valor5 = number_format($valor / 5, 2,'.',','); ?>
+                            <?php $valor5 = number_format($valorTotal / 5, 2,'.',','); ?>
                             <option value="{{ $valor5 * 5 }}">5x de R$ {{ $valor5 }}</option>
-                            <?php $valor6 = number_format($valor / 6, 2,'.',','); ?>
+                            <?php $valor6 = number_format($valorTotal / 6, 2,'.',','); ?>
                             <option value="{{ $valor6 * 6 }}">6x de R$ {{ $valor6 }}</option>
-                            <?php $valor10 = number_format($valor / 10, 2,'.',','); ?>
+                            <?php $valor10 = number_format($valorTotal / 10, 2,'.',','); ?>
                             <option value="{{ $valor10 * 10 }}">10x de R$ {{ $valor10 }}</option>
-                            <?php $valor11 = number_format($valor / 11, 2,'.',','); ?>
+                            <?php $valor11 = number_format($valorTotal / 11, 2,'.',','); ?>
                             <option value="{{ $valor11 * 11 }}">11x de R$ {{ $valor11 }}</option>
-                            <?php $valor12 = number_format($valor / 12, 2,'.',','); ?>
+                            <?php $valor12 = number_format($valorTotal / 12, 2,'.',','); ?>
                             <option value="{{ $valor12 * 12 }}">12x de R$ {{ $valor12 }}</option>
                         </select>
-                        @elseif($valor >= 100.00)
-                        <select name="valor" id="valor" class-"form-control">
-                            <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
-                            <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
+                        @elseif($valorTotal >= 100.00)
+                        <select name="valorTotal" id="valorTotal" class="browser-default custom-select">
+                            <option value="{{ $valorTotal }}">1x de R$ {{ $valorTotal }}</option>
+                            <?php $valor2 = number_format($valorTotal / 2, 2,'.',','); ?>
                             <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
-                            <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
+                            <?php $valor3 = number_format($valorTotal / 3, 2,'.',','); ?>
                             <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
-                            <?php $valor4 = number_format($valor / 4, 2,'.',','); ?>
+                            <?php $valor4 = number_format($valorTotal / 4, 2,'.',','); ?>
                             <option value="{{ $valor4 * 4 }}">4x de R$ {{ $valor4 }}</option>
-                            <?php $valor5 = number_format($valor / 5, 2,'.',','); ?>
+                            <?php $valor5 = number_format($valorTotal / 5, 2,'.',','); ?>
                             <option value="{{ $valor5 * 5 }}">5x de R$ {{ $valor5 }}</option>
-                            <?php $valor6 = number_format($valor / 6, 2,'.',','); ?>
+                            <?php $valor6 = number_format($valorTotal / 6, 2,'.',','); ?>
                             <option value="{{ $valor6 * 6 }}">6x de R$ {{ $valor6 }}</option>
                         </select>
                         @else
-                        <select name="valor" id="valor" class-"form-control">
-                           
-                            <option value="{{ $valor }}">1x de R$ {{ $valor }}</option>
-                            <?php $valor2 = number_format($valor / 2, 2,'.',','); ?>
+                        <select name="valorTotal" id="valorTotal" class="browser-default custom-select">            
+                            <option value="{{ $valorTotal }}">1x de R$ {{ $valorTotal }}</option>
+                            <?php $valor2 = number_format($valorTotal / 2, 2,'.',','); ?>
                             <option value="{{ $valor2 * 2 }}">2x de R$ {{ $valor2 }}</option>
-                            <?php $valor3 = number_format($valor / 3, 2,'.',','); ?>
+                            <?php $valor3 = number_format($valorTotal / 3, 2,'.',','); ?>
                             <option value="{{ $valor3 * 3 }}">3x de R$ {{ $valor3 }}</option>
                         </select>
                         @endif
@@ -228,13 +225,17 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
 
 
 
-
+                        
                         <input name="parcelas" id="parcelas" type="hidden" value="">
-
-                        <input name="descricao" type="hidden" value="{{ $descricao }}">
+                        <input name="identrega"  type="hidden" value="{{ $tipoEntrega }}">
+                        <input name="compra" type="hidden" value="{{ $compra }}">
                         <input name="User"  type="hidden" value="{{ $User }}">
                         <input name="id_carteira"  type="hidden" value="{{ $id_carteira }}">
                         <input name="sandbox"  type="hidden" value="{{ $sandbox }}">
+                        <input name="nome"  type="hidden" value="{{ $nome }}">
+                        <input name="id"  type="hidden" value="{{ $id }}">
+                        <input name="valorEntrega"  type="hidden" value="{{ $valorEntrega }}">
+                    
                     </div>
                     <br/>   
                     <div class="field-container">
@@ -254,8 +255,7 @@ $(document).ready(function(){ //AO CARREGAR A PÁGINA...
                         <label for="securitycode">Código de segurança</label>
                         <input id="securitycode" class="form-control" type="text" pattern="[0-9]{3}" required>
                     </div>
-                    <div class="field-container">
-                    
+                    <div class="field-container">                
                         <input id="submite" name="submite" type="submit" value="Comprar">
                     </div>
                 </div>

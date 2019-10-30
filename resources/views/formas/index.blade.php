@@ -74,7 +74,7 @@ $IDPED = $_GET['ped']='1'; // VEM DA VIEW PEDIDOS/INDEX - RETIRAR O VALOR AO LAD
 $Descricao = 'DVD Independence Day';
 $Valor = '20.00';
 $tpEnt = '1';
-$VlrEntrega = '20.00';
+//$VlrEntrega = '20.00';
 
 
 
@@ -82,17 +82,19 @@ $VlrEntrega = '20.00';
 
 //$Valor = $Valor * 100;
 $Id_carteira = "xeviousbr@gmail.com";
-$Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
-$user = 'teste';
-$email = 'teste@teste.com';
-$fone = '3072-5968';
-$cep = '91780118';
-$logradouro = 'endereço 20';
-$lograNumber = '15';
-$lograCompl = 'apto8';
-$cidade = 'Santo Andre';
-$bairro = 'marajoara';
-$estado = 'SP';
+$Nome = DB::table('users')->where('user',$user)->first()->Nome;
+
+    "Pagamento do Tele-Tudo.com, por compra realizada";
+//$user = 'teste';
+//$email = 'teste@teste.com';
+//$fone = '3072-5968';
+//$cep = '91780118';
+//$logradouro = 'endereço 20';
+//$lograNumber = '15';
+//$lograCompl = 'apto8';
+//$cidade = 'Santo Andre';
+//$bairro = 'marajoara';
+//$estado = 'SP';
 
 
 
@@ -120,8 +122,7 @@ $estado = 'SP';
 
     <input type="hidden" name="IDPED"  value="{{$IDPED}}">
 
-    <input type="hidden" name="VlrEntrega"  value="{{$VlrEntrega}}">
-
+   
     <input type="hidden" name="user"  value="{{$user}}">
 
     <!--Razão do pagamento	Razão do pagamento a ser mostrado na página do MoIP, durante o processo de confirmação (nome do produto/serviço)	Alfanumérico	64-->

@@ -69,8 +69,34 @@ class VlrtransfController extends Controller
     //CRIADO PARA REDIRECIONAMENTO DE PAAMENTO REALIZADO NO CARTÃO
     public function storeOthers(Request $request)
     {
+        $Nome = $request->Nome;
+        $ValorTotal = $request->ValorTotal;
+        $compra = $request->compra;
+        $Ped = $request->Ped;
+        $User = $request->user;
+        $id_carteira = $request->id_carteira;
+        $parcelas = $request->parcelas;
+        $securitycode = $request->securitycode;
+        $expirationdate = $request->expirationdate;
+        $cardnumber = $request->cardnumber;
+        $valorEntrega = $request->valorEntrega;
+        $sandbox = $request->sandbox;
+        $idEntrega = $request->identrega;
         
-        return Redirect::to('/entrega/'.$idEntrega = 1); //DEFINI UMA SIMULAÇÃO PARA O ID DA ENTREGA COM 1 EM PRODUÇÃO DEIXAR $idEntrega SOMENTE
+        //return Redirect::to('/entrega/'.$idEntrega.$User.$Ped.$parcelas.$sandbox); //DEFINI UMA SIMULAÇÃO PARA O ID DA ENTREGA COM 1 EM PRODUÇÃO DEIXAR $idEntrega SOMENTE
+    
+        return redirect()->route('entregaothers', ['identrega' => $idEntrega,
+                                                   'idped' => $Ped,
+                                                   'valortotal' => $ValorTotal,
+                                                   'compra' => $compra,
+                                                   'user' => $User,
+                                                   'parcelas' => $parcelas,
+                                                   'sandbox' => $sandbox,
+                                                   'valorentrega' => $valorEntrega,
+                                                   'cardnumber' => $cardnumber,
+                                                   'expirationdate' => $expirationdate,
+                                                   'securitycode' => $securitycode ]); 
+    
     }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Pedido;
+use Illuminate\Http\Request;
 
 /* use Illuminate\Http\Request;
 use App\Http\Requests; */
@@ -25,8 +26,33 @@ class PedidoController extends Controller
         return view('pedido.criapedido');
     }
 
-    public function Aciona() {
-        return view('pedido.index');
+    public function Aciona(Request $request) {
+
+        $id_carteira = $request->id_carteira;
+
+        $valor = $request->valor;
+    
+        $descricao = $request->descricao;
+    
+        $tpEnt = $request->tpEnt;
+    
+        $idPed = $request->IDPED;
+    
+        //$VlrEntrega = $request->VlrEntrega;
+    
+        $user = $request->user;
+    
+        $nome = $request->nome;
+
+        return view('pedido.index')
+            ->with(['id_carteira' => $id_carteira,
+                    'valor' => $valor,
+                    'descricao' => $descricao,
+                    'tpEnt' => $tpEnt,
+                    'idPed' => $idPed,
+                    'user' => $user,
+                    'nome' => $nome]
+                );
     }
     
 

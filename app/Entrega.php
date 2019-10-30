@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+
 class Entrega extends Model {
 
     protected $table = 'entrega';
@@ -22,6 +23,7 @@ class Entrega extends Model {
     private $debug=-1;
     private $ErroCalcTempo=0;
     private $idFornProd=0;
+
 
     private $AMB = ""; // D = Desenvolvimento / P = Produção
     private $Modo = 0;

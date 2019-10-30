@@ -19,18 +19,18 @@
 
     <?php
 
-$Descricao = 'DVD Independence Day';
-$Valor = '20.00';
+//$Descricao = 'DVD Independence Day';
+//$Valor = '20.00';
 //$Valor = $Valor * 100;
 $Id_carteira = "xeviousbr@gmail.com";
 $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
-$user = 'teste';
-$email = 'teste@teste.com';
+//$user = 'teste';
+//$email = 'teste@teste.com';
     
     $cEntrega = new App\Entrega();
     $idPedido = $_POST['IDPED']; //MUDOU DE GET PARA POST
     $tpEnt = $_POST['tpEnt'];
-    $VlrEntrega = $_POST['VlrEntrega'];
+    //$VlrEntrega = $_POST['VlrEntrega'];
     Session::put('IDPED', $idPedido);
     Session::put('ENTREGA', $tpEnt);
     //$VlrEntrega = 0;
@@ -51,12 +51,17 @@ $email = 'teste@teste.com';
     Session::put('VlrEntrega', $ValorEntrega);
     ?>
 
-    <div class="alert alert-success">Compras R$ {{ number_format($cEntrega->getCompras($idPedido), 2, ',', '.') }}</div>
+    <div class="alert alert-success">Compras R$ {{ number_format($valor = $cEntrega->getCompras($idPedido), 2, ',', '.') }}</div>
     <div class="alert alert-success">Tele-Entrega R$ {{ $ValorEntrega }}</div>
     <div class="alert alert-success"><input id="ValorTotal" name="ValorTotal" type="text" value="Valor Total R$ {{ $ValorTotal }}" style="border:none; background:transparent;"/><!--Valor Total R$ {{ $ValorTotal }}--></div>
     <input id="IDPED" name="IDPED" type="text" hidden="hidden" value="{{ $idPedido }}" /></p>
     <input id="user" name="user" type="text"  hidden="hidden" value="{{ $user }}" /></p>
- 
+    <input id="id_carteira" name="id_carteira" type="text"  hidden="hidden" value="{{ $id_carteira }}" /></p>
+    <input id="valor" name="valor" type="text"  hidden="hidden" value="{{ $valor }}" /></p>
+    <input id="descricao" name="descricao" type="text"  hidden="hidden" value="{{ $descricao }}" /></p>
+    <input id="tpEnt" name="tpEnt" type="text"  hidden="hidden" value="{{ $tpEnt }}" /></p>
+    <input id="nome" name="nome" type="text"  hidden="hidden" value="{{ $nome }}" /></p>
+
     <div>
         <table width="79%">
             <tr>
@@ -103,7 +108,17 @@ $email = 'teste@teste.com';
                     // TELE-ENTREGA PRÓPRIA
                     //document.location.assign("https://www.tele-tudo.com/pagtodireto");SUBSTITUÍ PELO DEBAIXO PARA MINHHA MAQUINA LOCAL
                     //document.location.assign("{!! action('OthersOptionsController@Aciona') !!}");
-                    document.location.assign("{!! route('cartao.index', ['user' => $user, 'IDPED' => $idPedido, 'valor' => $ValorTotal]) !!}");
+                    document.location.assign("{!! route('cartao.index', ['user' => $user, 
+                                                                         'IDPED' => $idPedido, 
+                                                                         'valorTotal' => $ValorTotal, 
+                                                                         'tipoEntrega' => $tpEnt,
+                                                                         'nome' => $nome,
+                                                                         'compra' => $descricao,
+                                                                         'valor' => $valor,
+                                                                         'id_carteira' => $id_carteira,
+                                                                         'valorEntrega' => $ValorEntrega,
+                                                                         'valor' => $valor]
+                                                                         ) !!}");
                     // document.location.assign("http://www.tele-tudo.com/resumo");
                 }
             }

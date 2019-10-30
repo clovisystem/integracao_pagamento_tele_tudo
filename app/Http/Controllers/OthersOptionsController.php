@@ -15,12 +15,17 @@ class OthersOptionsController extends Controller
 
     public function Aciona(Request $request){
 
-        $Valor = $request->valor; //$request->valor;
-        $Descricao = 'compra'; //$request->descricao;
+        $Valor = $request->valor; 
+        $ValorTotal = $request->valorTotal; 
+        $ValorEntrega = $request->valorEntrega; 
+        $compra = $request->compra; 
         $IDPED = $request->IDPED;
         $User = $request->user;
-        $id_carteira = 'xevious'; //$request->id_carteira;
+        $id_carteira = $request->id_carteira;
+        $tipoEntrega = $request->tipoEntrega;
+        $nome = $request->nome;
         //$request->all();
+        
         $sandbox = true;
         $setID = uniqid();
 
@@ -34,10 +39,13 @@ class OthersOptionsController extends Controller
                                             'User' => $User,
                                             'sandbox' => $sandbox,
                                             'IDPED' => $IDPED,
-                                            'Nome' => $Nome,
-                                            'descricao' => $Descricao,
+                                            'compra' => $compra,
                                             'valor' => $Valor,
-                                            'id_carteira' =>$id_carteira
+                                            'id_carteira' => $id_carteira,
+                                            'nome' => $nome,
+                                            'tipoEntrega' => $tipoEntrega,
+                                            'valorTotal' => $ValorTotal,
+                                            'valorEntrega' => $ValorEntrega
                                            ]); //ESSA VIEW DEVE SER USADA COM PRIORIDADE EM RELAÇÃO À DE CIMA PARA EXIBIR PÁINA ONDE O USUÁRIO INSERE INFORMAÇÕES DO CARTÂO
 
 
@@ -113,9 +121,10 @@ class OthersOptionsController extends Controller
         $sandbox = $request->sandbox;*/
 
         $Nome = htmlspecialchars($request->input('name'));
-        $Valor = htmlspecialchars($request->input('valor'));
-        $Valor = str_replace(',','.', $Valor);
-        $Descricao = htmlspecialchars($request->input('descricao'));
+        $ValorTotal = htmlspecialchars($request->input('valorTotal'));
+        $ValorTotal = str_replace(',','.', $ValorTotal);
+        $valorEntrega = htmlspecialchars($request->input('valorEntrega'));
+        $compra = htmlspecialchars($request->input('compra'));
         $Ped = htmlspecialchars($request->input('IDPED'));
         $User = htmlspecialchars($request->input('User'));
         $id_carteira = htmlspecialchars($request->input('id_carteira'));
@@ -124,6 +133,7 @@ class OthersOptionsController extends Controller
         $cardnumber = htmlspecialchars($request->input('cardnumber'));
         $expirationdate = htmlspecialchars($request->input('expirationdate'));
         $securitycode = htmlspecialchars($request->input('securitycode'));
+        $identrega = htmlspecialchars($request->input('identrega'));
 
 
 
@@ -134,8 +144,8 @@ class OthersOptionsController extends Controller
         $moipPag = new MoipPagamento($token, $key, $sandbox, $Ped, $id_carteira, $User, $parcelas );
 
         $scripts = $moipPag->setID($setID = uniqid())   //ID unico para identificar a compra
-                            ->setPreco($Valor)   //Preço da compra
-                            ->setDescricao($Descricao)
+                            ->setPreco($ValorTotal)   //Preço da compra
+                            ->setDescricao($compra)
                             ->addFormaPagamento(MoipPagamento::CHECKOUT_CARTAO) //Libera forma de pagamento por cartão
                             ->getCheckoutTransparente();
 
@@ -155,7 +165,18 @@ class OthersOptionsController extends Controller
    
             //return view('vlrtransf.index')->with(compact('setID','Ped','Valor','Descricao','User'));
         
-            return redirect()->route('enviartransrfOthers', [$setID,$Ped,$Valor,$Descricao,$User]); 
+            return redirect()->route('enviartransrfOthers', [$identrega,
+                                                             $setID,
+                                                             $Ped,
+                                                             $ValorTotal,
+                                                             $compra,
+                                                             $User,
+                                                             $valorEntrega, 
+                                                             $parcelas,
+                                                             $cardnumber,
+                                                             $expirationdate,
+                                                             $securitycode,
+                                                             $valorEntrega]); 
 
         }
         else{

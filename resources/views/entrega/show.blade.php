@@ -8,11 +8,14 @@
         #map { height: 100%; margin: 10%; padding: 0% }
     </style>
 
+
     <?php
     $clsEntrega = new App\Entrega();
 
-    $idPedido = $entr->idPedido;
-    // $idPedido = $clsEntrega->getPedido();
+    //{{ $identrega; }}
+    //$idPedido = $entr->idPedido;
+    $idPedido = $idped;
+    //$idPedido = $clsEntrega->getPedido();
 
     $EsperaPagamento=1;
     $Modo=$clsEntrega->getModo();
