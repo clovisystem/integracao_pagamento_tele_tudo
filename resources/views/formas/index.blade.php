@@ -48,12 +48,14 @@ if ($Teste==0) {
     $OutrDisab='';
 }
 
-//CRIADO PARA FINS DE TESTES COM O CECKOUT SEGURO
+//CRIADO PARA FINS DE TESTES COM O ChECKOUT SEGURO
 /*$OutrDenab='enabled';
 if ($Teste==1) {
     // $OnLine=1;
     $OutrDenab='';
 }*/
+$Nome = DB::table('users')->where('user',$user)->first()->Nome;
+
 
 /*if ($OnLine==0) {
     echo "<a class='btn btn-small btn-success btn-lg btn-block' disabled >Transferência Bancária</a>";
@@ -65,42 +67,6 @@ if ($Teste==1) {
 
 // }
 
-
-
-
-$IDPED = $_GET['ped']='1'; // VEM DA VIEW PEDIDOS/INDEX - RETIRAR O VALOR AO LADO EM TEMPO DE PRODUÇÃO
-
-//$Valor = Session::get('VLRTOTAL'); //O CODIGO AO LADO SÓ DEVE SER USADO EM PRODUÇÃO, EM DESENVOLVIMENTO COMENTE!
-$Descricao = 'DVD Independence Day';
-$Valor = '20.00';
-$tpEnt = '1';
-//$VlrEntrega = '20.00';
-
-
-
-
-
-//$Valor = $Valor * 100;
-$Id_carteira = "xeviousbr@gmail.com";
-$Nome = DB::table('users')->where('user',$user)->first()->Nome;
-
-    "Pagamento do Tele-Tudo.com, por compra realizada";
-//$user = 'teste';
-//$email = 'teste@teste.com';
-//$fone = '3072-5968';
-//$cep = '91780118';
-//$logradouro = 'endereço 20';
-//$lograNumber = '15';
-//$lograCompl = 'apto8';
-//$cidade = 'Santo Andre';
-//$bairro = 'marajoara';
-//$estado = 'SP';
-
-
-
-
-
-//, compact(Id_carteira, Valor, Ped, Nome -> ESTAVE NO ROUTE DA ACTION DO FORM
 ?>
 
 <!--<form action="https://www.moip.com.br/PagamentoMoIP.do" method="POST">-->
@@ -111,7 +77,7 @@ $Nome = DB::table('users')->where('user',$user)->first()->Nome;
     {{ method_field('POST') }}
 
     <!--Sua identificação no MoIP. Pode ser seu e-mail principal, celular verificado ou login.	Alfanumérico	45-->
-    <input type="hidden" name="id_carteira" value="{{$Id_carteira}}">
+    <input type="hidden" name="id_carteira" value="{{$id_carteira}}">
 
     <!--O valor da transação, sem vírgulas e identificador da moeda	Numérico (inteiro)	9-->
     <input type="hidden" name="valor"  value="{{$Valor}}">

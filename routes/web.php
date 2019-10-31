@@ -78,6 +78,8 @@ Route::any('entregaothers', [ 'as' => 'entregaothers', 'uses' => 'EntregaControl
 
 Route::get('formas/{ped?}/{id?}', ['as' => 'formas', 'uses' => 'FormasController@Aciona']);
 
+Route::post('formas', 'FormasController@index');
+
 Route::post('pessoa', 'PessoaController@insert');
 
 Route::post('produtos/index', 'ProdutosController@Redireciona');
@@ -89,6 +91,8 @@ Route::any('pagamento/index', [ 'as' => 'cartao.index', 'uses' => 'OthersOptions
 Route::post('checkout', 'OthersOptionsController@Checkout');
 
 Route::post('store', 'OthersOptionsController@store');
+
+Route::get('teste', 'TesteDesenvolvController@index');
 
 // Deve ficar por último
 
