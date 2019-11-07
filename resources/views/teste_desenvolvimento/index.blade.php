@@ -50,7 +50,9 @@ $Nome = DB::table('users')->where('user',$user)->first()->Nome;
 <form name="teste" method="post" action="/formas" class="form-group">
     {{ csrf_field() }}
     <label>usuário</label>
-    <input type="text" name="user" value="" class="form-control"/>
+    <input type="text" name="user" id="user" value="" class="form-control"/>
+    <br>
+    <label id="labelUser"></label>
     <br>
     <label>vendedor</label>
     <input type="text" name="id_carteira" value="xeviousbr@gmail.com" readonly="true" class="form-control"/>
@@ -70,8 +72,9 @@ $Nome = DB::table('users')->where('user',$user)->first()->Nome;
     <input type="text" name="produtos" id="produtos" value="" class="form-control"/>
     <br>
     <label>Número do pedido</label>
-    <input type="text" name="idPed" value="{{ uniqid() }}" class="form-control"/>
+    <input type="text" name="nrPed" value="{{ uniqid() }}" class="form-control"/>
     <br>
+    
     <label>Entrega por</label>
     <select  id ="tpEnt" name="tpEnt"  class="form-control">
         <option value="0" selected>Escolha uma opção</option>
@@ -79,14 +82,55 @@ $Nome = DB::table('users')->where('user',$user)->first()->Nome;
         <option value="2">Correios</option>
     </select>
 
+    <label>Valor de Entrega</label>
+    <input type="text" name="vlrEntr" id="vlrEntr" value="" class="form-control"/>
+    <br>
+
     <script>
         window.onload=(function(){
             
             $("#tpEnt").change(function(){
                 //var selecao = $(this).val();
                 //alert(selecao);
-                teste.submit();
+                //alert($("#dropDownMenuKategorie").prop('selectedIndex'));
+               
+            
+
+
+                if($("#tpEnt").prop("selectedIndex") == 1){
+                    $("#vlrEntr").val("20.00");
+                    var usuario = $("#user").length;
+                    if(usuario >= 1){
+                        teste.submit();
+                    } 
+                    else{
+                        $("#labelUser").css("visibility", "visibility");
+                        $("#labelUser").val("Informe seu nome");
+                    }
+                    
+                }
+                else if($("#tpEnt").prop("selectedIndex") == 2){
+                    $("#vlrEntr").val("25.00");
+                    var usuario = $("#user").length;
+                    if(usuario >= 1){
+                        teste.submit();
+                    } 
+                    else{
+                        $("#labelUser").css("visibility", "visibility");
+                        $("#labelUser").val("Informe seu nome");
+                    }
+                    
+                }
+                else{
+                    $("#vlrEntr").val(""); 
+                }
+                
+   
+                
             });
+
+
+            
 
             $("#atencao").css("visibility","hidden");
              

@@ -18,9 +18,16 @@
 
 
 @if($user == '')
-    <h1>Logue-se para comprar!<h1>
+    <h1 class="alert alert-warning">Informe seu nome!<h1><script>setTimeout(function(){history.back(-1);}, 3000)</script>
+@elseif($user == null)
+    <h1 class="alert alert-danger">Logue-se para comprar!<h1><script>setTimeout(function(){history.back(-1);}, 3000)</script>
 @else
     <h1>Escolha a forma de pagamento, {{ $user }}.<h1>
+@endif
+
+
+@if($Valor == '')
+    <h1 class="alert alert-warning">Você esqueceu de escolher o produto!<h1><script>setTimeout(function(){history.back(-1);}, 3000)</script>
 @endif
 
 
@@ -56,6 +63,12 @@ if ($Teste==1) {
 }*/
 $Nome = DB::table('users')->where('user',$user)->first()->Nome;
 
+{{ $vlrEntr = isset($_POST['vlrEntr'])?$_POST['vlrEntr']:'20.00'; }}
+
+if($_POST['produtos']=='' || $_POST['produtos']=='nada'){
+    echo '<script>history.back(-1);</script>';
+}
+
 
 /*if ($OnLine==0) {
     echo "<a class='btn btn-small btn-success btn-lg btn-block' disabled >Transferência Bancária</a>";
@@ -85,6 +98,8 @@ $Nome = DB::table('users')->where('user',$user)->first()->Nome;
     <input type="hidden" name="descricao"  value="{{$Descricao}}">
 
     <input type="hidden" name="tpEnt"  value="{{$tpEnt}}">
+
+    <input type="hidden" name="VlrEntrega"  value="{{$vlrEntr}}">
 
     <input type="hidden" name="IDPED"  value="{{$IDPED}}">
 

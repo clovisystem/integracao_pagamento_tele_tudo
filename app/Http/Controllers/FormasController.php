@@ -65,7 +65,8 @@ class FormasController extends Controller
 												'Valor' => $valor,
 												'Descricao' => $Descricao,
 												'tpEnt' => $tpEnt,
-												'IDPED' => $idPed));
+												'IDPED' => $idPed,
+												'produtos' => $produtos));
 
 		}
 

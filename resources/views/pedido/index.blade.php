@@ -29,11 +29,20 @@ $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
     
     $cEntrega = new App\Entrega();
     $idPedido = $_POST['IDPED']; //MUDOU DE GET PARA POST
+    
+
+    if($idPedido != 1){
+        $idPedido = 1;
+    }
+
     $tpEnt = $_POST['tpEnt'];
-    //$VlrEntrega = $_POST['VlrEntrega'];
-    Session::put('IDPED', $idPedido);
-    Session::put('ENTREGA', $tpEnt);
-    //$VlrEntrega = 0;
+    $VlrEntrega = $_POST['VlrEntrega'];
+    //$VlrEntrega = 20;
+    
+    //Session::put('IDPED', $idPedido);
+   // Session::put('ENTREGA', $tpEnt);
+    //Session::put('VlrEntrega', $VlrEntrega);
+    
     if (Session::has('VlrEntrega')) {
         $VlrEntrega = Session::get('VlrEntrega');
     }
@@ -79,7 +88,7 @@ $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
                 <td height="30px"></td>
                 <td height="30px"></td>
 
-                <td height="30px"><input type="submit" id="btPagamento" value="Finalização da compra" onclick="Pagar()" width="133px" text-align="center" class="btn btn-success" /></td>
+                <td height="30px"><button  id="btPagamento" value="Finalização da compra" onclick="Pagar()" width="133px" text-align="center" class="btn btn-success" >Finalização da compra</button></td>
             </tr>
         </table>
         <br/>
@@ -98,8 +107,8 @@ $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
         <script>
             function Pagar() {
                 var tpEnt = <?php echo $tpEnt; ?>;
-                var idPedido = <?php echo $idPedido; ?>;
-
+                var idPedido = <?php echo $idPedido = '2136'; ?>;
+                alert("ola");
                 // alert(tpEnt);
                 if (tpEnt==0) {
                     // PLAY DELIVERY
@@ -108,20 +117,20 @@ $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
                     // TELE-ENTREGA PRÓPRIA
                     //document.location.assign("https://www.tele-tudo.com/pagtodireto");SUBSTITUÍ PELO DEBAIXO PARA MINHHA MAQUINA LOCAL
                     //document.location.assign("{!! action('OthersOptionsController@Aciona') !!}");
-                    document.location.assign("{!! route('cartao.index', ['user' => $user, 
-                                                                         'IDPED' => $idPedido, 
-                                                                         'valorTotal' => $ValorTotal, 
-                                                                         'tipoEntrega' => $tpEnt,
-                                                                         'nome' => $nome,
-                                                                         'compra' => $descricao,
-                                                                         'valor' => $valor,
-                                                                         'id_carteira' => $id_carteira,
-                                                                         'valorEntrega' => $ValorEntrega,
-                                                                         'valor' => $valor]
-                                                                         ) !!}");
+                    document.location.assign("{!! route('cartao.index', ['user' => $user, 'IDPED' => $idPedido,'valorTotal' => $ValorTotal, 'tipoEntrega' => $tpEnt,'nome' => $nome,'compra' => $descricao, 'valor' => $valor, 'id_carteira' => $id_carteira, 'valorEntrega' => $ValorEntrega,'valor' => $valor]) !!}");
+                                                                         
+                                                                         
+                                                                         
+                                                                          
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                    
                     // document.location.assign("http://www.tele-tudo.com/resumo");
                 }
-            }
+            }   
 
             function Mais() {
                 var ped = document.getElementById("hPd").value;

@@ -46,7 +46,7 @@ class OthersOptionsController extends Controller
                                             'tipoEntrega' => $tipoEntrega,
                                             'valorTotal' => $ValorTotal,
                                             'valorEntrega' => $ValorEntrega
-                                           ]); //ESSA VIEW DEVE SER USADA COM PRIORIDADE EM RELAÇÃO À DE CIMA PARA EXIBIR PÁINA ONDE O USUÁRIO INSERE INFORMAÇÕES DO CARTÂO
+                                            ]); //ESSA VIEW DEVE SER USADA COM PRIORIDADE EM RELAÇÃO À DE CIMA PARA EXIBIR PÁINA ONDE O USUÁRIO INSERE INFORMAÇÕES DO CARTÂO
 
 
             //COMENTE EM PRODUÇÃO O COMANDO ABAIXO, EM TESTES COMENTE O SCRIPT DE CIMA

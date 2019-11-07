@@ -14,8 +14,8 @@
 
     //{{ $identrega; }}
     //$idPedido = $entr->idPedido;
-    $idPedido = $idped;
-    //$idPedido = $clsEntrega->getPedido();
+    //$idPedido = $idped;
+    $idPedido = $clsEntrega->getPedido();
 
     $EsperaPagamento=1;
     $Modo=$clsEntrega->getModo();

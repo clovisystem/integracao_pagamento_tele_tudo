@@ -61,7 +61,10 @@ class EntregaController extends Controller
 
     public function show($id)
     {
+        
+        
         $entr = Entrega::where("id",$id)->first();
+        
         return view('entrega.show', compact('entr'));
     }
 

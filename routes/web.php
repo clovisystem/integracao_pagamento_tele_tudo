@@ -74,7 +74,9 @@ Route::post('enviartransrf', "VlrtransfController@store");
 
 Route::any('enviartransrfOthers/{identrega?}/{setID?}/{Ped?}/{Valor?}/{Descricao?}/{User?}', [ 'as' => 'enviartransrfOthers', 'uses' => 'VlrtransfController@storeOthers' ]);
 
-Route::any('entregaothers', [ 'as' => 'entregaothers', 'uses' => 'EntregaController@Aciona' ]);
+//Route::any('entregaothers', [ 'as' => 'entregaothers', 'uses' => 'EntregaController@Aciona' ]);
+
+Route::any('entregaothers/{idped}', [ 'as' => 'entregaothers', 'uses' => 'EntregaController@show' ]);
 
 Route::get('formas/{ped?}/{id?}', ['as' => 'formas', 'uses' => 'FormasController@Aciona']);
 
