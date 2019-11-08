@@ -108,8 +108,7 @@ $Nome = "Pagamento do Tele-Tudo.com, por compra realizada";
             function Pagar() {
                 var tpEnt = <?php echo $tpEnt; ?>;
                 var idPedido = <?php echo $idPedido = '2136'; ?>;
-                alert("ola");
-                // alert(tpEnt);
+
                 if (tpEnt==0) {
                     // PLAY DELIVERY
                     document.location.assign("https://www.tele-tudo.com/formas?ped="+idPedido);

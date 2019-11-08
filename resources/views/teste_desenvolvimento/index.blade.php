@@ -12,41 +12,6 @@
 
 
 
-<!--
-$IDPED = $_GET['ped']='1'; // VEM DA VIEW PEDIDOS/INDEX - RETIRAR O VALOR AO LADO EM TEMPO DE PRODUÇÃO
-
-//$Valor = Session::get('VLRTOTAL'); //O CODIGO AO LADO SÓ DEVE SER USADO EM PRODUÇÃO, EM DESENVOLVIMENTO COMENTE!
-$Descricao = 'DVD Independence Day';
-$Valor = '20.00';
-$tpEnt = '1';
-//$VlrEntrega = '20.00';
-
-
-
-
-
-//$Valor = $Valor * 100;
-$Id_carteira = "xeviousbr@gmail.com";
-$Nome = DB::table('users')->where('user',$user)->first()->Nome;
-
-    "Pagamento do Tele-Tudo.com, por compra realizada";
-//$user = 'teste';
-//$email = 'teste@teste.com';
-//$fone = '3072-5968';
-//$cep = '91780118';
-//$logradouro = 'endereço 20';
-//$lograNumber = '15';
-//$lograCompl = 'apto8';
-//$cidade = 'Santo Andre';
-//$bairro = 'marajoara';
-//$estado = 'SP';
-
-
-
-
-
-//, compact(Id_carteira, Valor, Ped, Nome -> ESTAVE NO ROUTE DA ACTION DO FORM
--->
 <form name="teste" method="post" action="/formas" class="form-group">
     {{ csrf_field() }}
     <label>usuário</label>
@@ -58,11 +23,22 @@ $Nome = DB::table('users')->where('user',$user)->first()->Nome;
     <input type="text" name="id_carteira" value="xeviousbr@gmail.com" readonly="true" class="form-control"/>
     <br>
     <br>
+
+    <?php $arr = array("teclado", "notebook", "caixadesom", "mouse", ); ?>
     <label>carrinho</label>
-    <p><input type="checkbox" name="Descricao" class="Descricao" id="Descricao1" value="teclado" />Teclado</p>
+    <br>
+
+    @foreach($arr as $produto)
+      
+            <?php $produto = str_replace(' ','',$produto); ?>
+            <input type="checkbox" name="Descricao" class="Descricao" id="Descricao{{ $produto }}" value="{{ $produto }}" />{{ $produto }}
+       <br>
+    <!--<p><input type="checkbox" name="Descricao" class="Descricao" id="Descricao1" value="teclado" />Teclado</p>
     <p><input type="checkbox" name="Descricao" class="Descricao" id="Descricao2" value="notebook" />Notebook</p>
     <p><input type="checkbox" name="Descricao"  class="Descricao" id="Descricao3" value="caixa de som" />Caixa de Som</p>
-    <p><input type="checkbox" name="Descricao"  class="Descricao" id="Descricao4" value="mouse" />Mouse</p>
+    <p><input type="checkbox" name="Descricao"  class="Descricao" id="Descricao4" value="mouse" />Mouse</p>-->
+    @endforeach
+  
     <br>
     <label>valor</label>
     <input type="text" name="valor" id="valor" value="" class="form-control"/>
@@ -90,12 +66,6 @@ $Nome = DB::table('users')->where('user',$user)->first()->Nome;
         window.onload=(function(){
             
             $("#tpEnt").change(function(){
-                //var selecao = $(this).val();
-                //alert(selecao);
-                //alert($("#dropDownMenuKategorie").prop('selectedIndex'));
-               
-            
-
 
                 if($("#tpEnt").prop("selectedIndex") == 1){
                     $("#vlrEntr").val("20.00");
@@ -124,38 +94,36 @@ $Nome = DB::table('users')->where('user',$user)->first()->Nome;
                 else{
                     $("#vlrEntr").val(""); 
                 }
-                
-   
-                
+               
             });
-
-
-            
+       
 
             $("#atencao").css("visibility","hidden");
              
-            /*if(descricao = "teclado"){
-                $("#valor").val("25.00"); 
-            }*/
-            
+  
             $(".Descricao").change(function(){
    
-                    var descricao1 = $("#Descricao1").is(':checked');
-                    var descricao2 = $("#Descricao2").is(':checked');
-                    var descricao3 = $("#Descricao3").is(':checked');
-                    var descricao4 = $("#Descricao4").is(':checked');
+                    {{ $matriz = count($arr) }}
+                    {{ $matriz - 2}}
+                    {{ $matriz - 3}}
+                    {{ $matrizlast = $matriz - 5}}
 
+                    
+                    
+                    @for($i = 1; $i <= $matriz; $i++)
+                    
+                     
+                       var descricao{{$i}} = $("#Descricao{{ $arr[$matrizlast + $i] }}").is(':checked');
+                    
+                    
+                    @endfor
+                
+                   
+                   
                     var descricao = [descricao1, descricao2, descricao3, descricao4];
 
                     $itens = $("#valor").val(descricao);
 
-
-                    /*switch(descricao){
-                        case "true,false,false,false" : $("#valor").val("20.00"); break;
-                        case "true,true,false,false" : $("#valor").val("1020.00"); break;
-                        case "true,true,true,false" : $("#valor").val("1040.00"); break;
-                        case "true,true,true,true" : $("#valor").val("1050.00"); break;
-                    };*/
                     if(descricao=="true,false,false,false"){
                         $("#valor").val("20.00");
                         var produtos = ["teclado"];
@@ -261,9 +229,6 @@ $Nome = DB::table('users')->where('user',$user)->first()->Nome;
                 
             });
 
-            /*$("#valor").change(function(){ //EVENTO CHANGE DA SELECT/OPTION DA PÁGINA
-        var selecao = $(this).val(); // pega o valor INTEIRO DA COMPRA
-        var indice = $(this).prop('selectedIndex'); //pega o índice do select/option(html)*/
         });
        
     

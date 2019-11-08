@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entrega;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EntregaController extends Controller
 {
@@ -56,21 +57,19 @@ class EntregaController extends Controller
                                      'cardnumber' => $cardnumber,
                                      'valorentrega' => $valorentrega,
                                      'sandbox' => $sandbox]);
-            //->with('identrega', $id);
+
     }
 
-    public function show($id)
+    public function show($idUser, $idEntr)
     {
-        
-        
-        $entr = Entrega::where("id",$id)->first();
-        
-        return view('entrega.show', compact('entr'));
+    
+        $idPedidoEntr = DB::Table('entrega')->where("id",$idEntr)->first()->idPedido;
+
+
+        return view('entrega.show', compact('idUser', 'idEntr', 'idPedidoEntr'));
     }
 
-    // $entrega = Entrega::find($id);
-    /* return view('entrega.show')
-        ->with('idEntrega', $id); */
+
 
 
     public function Processa()

@@ -72,7 +72,7 @@ class VlrtransfController extends Controller
         $Nome = $request->Nome;
         $ValorTotal = $request->ValorTotal;
         $compra = $request->compra;
-        $Ped = $request->Ped;
+        $Ped = $request->Ped = 1;
         $User = $request->user;
         $id_carteira = $request->id_carteira;
         $parcelas = $request->parcelas;
@@ -82,10 +82,13 @@ class VlrtransfController extends Controller
         $valorEntrega = $request->valorEntrega;
         $sandbox = $request->sandbox;
         $idEntrega = $request->identrega;
+        $idUser = $request->idUser;
+        
         
         //return Redirect::to('/entrega/'.$idEntrega.$User.$Ped.$parcelas.$sandbox); //DEFINI UMA SIMULAÇÃO PARA O ID DA ENTREGA COM 1 EM PRODUÇÃO DEIXAR $idEntrega SOMENTE
     
-        return redirect()->route('entregaothers', ['identrega' => $idEntrega,
+        return redirect()->route('entregaothers', ['idUser' => $idUser,
+                                                   'identrega' => $idEntrega,
                                                    'idped' => $Ped,
                                                    'valortotal' => $ValorTotal,
                                                    'compra' => $compra,

@@ -13,10 +13,12 @@
     $clsEntrega = new App\Entrega();
 
     //{{ $identrega; }}
-    //$idPedido = $entr->idPedido;
+    //$idPedido = $entr->first()->idPedido;
+    //$idPedido = Entrega::where('id', $id)->first()->idPedido;
     //$idPedido = $idped;
-    $idPedido = $clsEntrega->getPedido();
-
+    //$idPedido = $clsEntrega->getPedido();
+    $idPedido = $idPedidoEntr;
+    $idUser = $idUser;
     $EsperaPagamento=1;
     $Modo=$clsEntrega->getModo();
     $Teste=0;
@@ -356,10 +358,17 @@
 <?php
 $iduser=0;
 
-if (Session::has('iduser')) {
+/*if (Session::has('iduser')) {
     $iduser=Session::get('iduser');
 } else {
     echo 'Sem Session:iduser'; die;
+}
+*/
+
+if (isset($idUser)) {
+    $iduser = $idUser;
+} else {
+    echo 'Sem Session: {{ $iduser }}'; die;
 }
 // $clsEntrega = new Entrega();
 $geoCli = $clsEntrega->CoordCliente($iduser);

@@ -134,8 +134,12 @@ class OthersOptionsController extends Controller
         $expirationdate = htmlspecialchars($request->input('expirationdate'));
         $securitycode = htmlspecialchars($request->input('securitycode'));
         $identrega = htmlspecialchars($request->input('identrega'));
+        $idUser = htmlspecialchars($request->input('id'));
 
-
+        if($idUser != 1 || $identrega != 1){
+            $idUser = 1;
+            $identrega = 1;
+        }
 
         $token =  'J27IIMSM0MWSQJIXT1MDUTHZFBWMV4W2';
         $key = 'IEVEAUWW0E4GX6FPYIEUHC7YTJEGOFNYXCEPKAER';
@@ -165,7 +169,8 @@ class OthersOptionsController extends Controller
    
             //return view('vlrtransf.index')->with(compact('setID','Ped','Valor','Descricao','User'));
         
-            return redirect()->route('enviartransrfOthers', [$identrega,
+            return redirect()->route('enviartransrfOthers', [$idUser,
+                                                             $identrega,
                                                              $setID,
                                                              $Ped,
                                                              $ValorTotal,
